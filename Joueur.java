@@ -8,7 +8,7 @@ public class Joueur
 	private Robot[] ensRobots;
 	private int nbPoint;
 	
-	public Joueur(String nom, Metier metier)
+	public Joueur(Metier metier)
 	{
 		this.nom         = nom;
 		this.metier      = metier;
@@ -40,8 +40,13 @@ public class Joueur
 	}
 	
 	//Get
+	public Robot getRobot(int indRobot)
+	{
+		return this.ensRobots[indRobot];
+	}
+	
 	public ArrayList<Pion> getListePions()
 	{
-		this.metier.getListePions;
+		return this.metier.getListePions;
 	}
 }
