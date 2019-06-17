@@ -21,9 +21,6 @@ public class Metier
 
 	public void jouer()
 	{
-		for(Pion pion : this.pions)
-			System.out.println(pion);
-		/*String algorithme = "";
 		for(Joueur joueur : joueurs)
 		{
 			if(!this.end)
@@ -35,10 +32,10 @@ public class Metier
 				System.out.println("Algorithme Robot 2 : ");
 				for(Ordre ordre : joueur.getRobot(1).getAlgo())
 					System.out.println("\t" + (++i) + ordre.toString());
-				System.out.println("Quelle action faire ? \n"                     + 
-									"1 - Placer un ordre \n"                     +
-									"2 - Permuter deux ordres \n"                 +
-									"3 - Retirer un ordre \n"                    +
+				System.out.println("Quelle action faire ? \n"                   + 
+									"1 - Placer un ordre \n"                    +
+									"2 - Permuter deux ordres \n"               +
+									"3 - Retirer un ordre \n"                   +
 									"4 - Retirer tous les ordres d'un robot \n" +
 									"5 - Ne rien faire \n"                        );
 									
@@ -50,18 +47,32 @@ public class Metier
 				{
 					case 1:
 						System.out.println("Quel ordre ajouter ?");
+						
 						for(Ordre ordre : joueur.getStockOrdres())
 							System.out.println("\t" + (++i) + ordre.toString());
+						
 						int nouvelOrdre = Clavier.lire_int();
+						
 						System.out.println("Dans quel slot voulez vous l'ajouter ?");
 						int slot    = Clavier.lire_int();
-						joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3);
-						if(
+						Ordre tmp = joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3);
+						if(tmp!=null)
+						{
+							joueur.ajouter(tmp);
+							tmp = joueur.getStockOrdres().remove(nouvelOrdre);
+							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3, tmp);
+						}
+						else
+						{
+							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3,joueur.getStockOrdres().remove(nouvelOrdre));
+						}
+						break;
+					case 2:
+						
 						break;
 				}
 			}
 		}
-		*/
 	}
 
 	//--------------------------------------------------------------
