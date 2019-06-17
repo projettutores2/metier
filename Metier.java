@@ -15,18 +15,14 @@ public class Metier
 		this.joueurs = new ArrayList<Joueur>();
 		this.pions   = new ArrayList<Pion>();
 
-		//demande et cree les joueurs
-		int nbJoueur=this.ctrl.nombreDeJoueur();
-		for (int i = 0; i < nbJoueur; i++) 
-		{
-			this.joueurs.add(new Joueur(this));
-		}
 		//a la charge de creer et donner les ordres
-		Regle.initialisation(joueurs);
+		Regle.initialisation(this.joueurs,2,this.pions,this);
 	}
 
 	public void jouer()
 	{
+		for(Pion pion : this.pions)
+			System.out.println(pion);
 		/*String algorithme = "";
 		for(Joueur joueur : joueurs)
 		{
@@ -72,7 +68,7 @@ public class Metier
 	//                             GET
 	public boolean getEnd() {return this.end ;}
 	
-	public ArrayList<Pion> getListePion()
+	public ArrayList<Pion> getListePions()
 	{
 		return this.pions;
 	}
