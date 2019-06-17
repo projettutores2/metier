@@ -30,7 +30,7 @@ public abstract class Pion
 			     setCoord[2] == p.z    );
 	}
 
-	/*public Pion nomCool()
+	public Pion getPionCollision()
 	{
 		for ( Pion p : this.joueur.getListePions() )
 		{
@@ -41,5 +41,5 @@ public abstract class Pion
 		}
 
 		return null;
-	}*/
+	}
 }
