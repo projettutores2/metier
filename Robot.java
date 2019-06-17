@@ -22,43 +22,43 @@ public class Robot extends Pion
 		this.algo = new Ordre[3];
 	}
 
-	public boolean deposer( Cristal c )
+	public Robot( Joueur j )
+	{
+		this( 0, 0, 0, j, 0 );
+	}
+
+	public void avancer()
 	{
 		//Déplacement du pion pour vérifier qu'il y a une collision après
 		switch ( this.direction ) {
-			case 0: this.z--; break;
-			case 1: this.x++; break;
-			case 2: this.y--; break;
-			case 3: this.z++; break;
-			case 4: this.x--; break;
-			case 5: this.y++; break;
+			case 0: this.z--;this.x++; break;
+			case 1: this.x++;this.y--; break;
+			case 2: this.y--;this.z++; break;
+			case 3: this.z++;this.x--; break;
+			case 4: this.x--;this.y--; break;
+			case 5: this.y++;this.z--; break;
 		}
+	}
 
-		for ( Pion p : this.joueur.getListePions() )
+
+	public void changerDirection( char sens )
+	{
+		switch ( sens )
 		{
-			//Si le pion est bien une base et qu'on est en collision avec
-			if ( p.getClass().getSimpleName().equals("Base") &&
-				 this.collision( this.getCoords(), p )          )
-			{
-				try
-				{
-					p.stocker( this.cristal );
-					this.cristal = null;
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+			case 'D':this.direction++; break;
+			case 'G':this.direction--; break;
 		}
 
-		//On remet le pion à sa position initiale
-		switch ( this.direction ) {
-			case 0: this.z++; break;
-			case 1: this.x--; break;
-			case 2: this.y++; break;
-			case 3: this.z--; break;
-			case 4: this.x++; break;
-			case 5: this.y--; break;
-		}
+		this.direction %= 6;
+	}
+
+	public void charger()
+	{
+		
+	}
+
+	public void decharger( Cristal c )
+	{
+
 	}
 }
