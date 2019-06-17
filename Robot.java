@@ -129,9 +129,7 @@ public class Robot extends Pion
 
 		if ( this.getPionCollision( coordTemp, this.joueur ) instanceof Cristal )
 		{
-			this.cristal = this.getPionCollision( coordTemp, this.joueur );
-			//A tester
-			//this.getPionCollision( coordTemp, this.joueur ) = null;
+			this.cristal = (Cristal)(this.getPionCollision( coordTemp, this.joueur ));
 
 			//Autre moyen
 			Pion pTemp = this.getPionCollision( coordTemp, this.joueur );

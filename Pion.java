@@ -55,5 +55,7 @@ public abstract class Pion
 		String s = this.getClass().getSimpleName();
 
 		s += " - " + this.x + ":" + this.y + ":" + this.z;
+
+		return s;
 	}
 }
