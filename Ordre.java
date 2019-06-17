@@ -16,7 +16,7 @@ class Avancer extends Ordre
 
 	public Avancer(int multiple)
 	{
-		super("Avancer"+(mulitple == 1 ? " simple":" double"));
+		super("Avancer"+(multiple == 1 ? " simple":" double"));
 		this.multiple=multiple;
 	}
 	

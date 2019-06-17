@@ -40,13 +40,13 @@ public class Regle
 	        	if(chaine[1].equals("nom") && chaine.length >=9)
 	        	{
 	        		//on cree un nouveau joueur et on l'ajoute
-	        		Joueur tmpJoueur = new Joueur (chaine[2],metier);
+	        		Joueur tmpJoueur = new Joueur (chaine[3],metier);
 	        		if(tmpJoueur!=null) joueurs.add(tmpJoueur);
 	        		//on cree c'est 2 robot
-	        		Robot tmpRobot1= new Robot(Integer.parseInt(chaine[3]),Integer.parseInt(chaine[4]),Integer.parseInt(chaine[5]),
-	        			tmpJoueur,Integer.parseInt(chaine[2]));
-	        		Robot tmpRobot2= new Robot(Integer.parseInt(chaine[7]),Integer.parseInt(chaine[8]),Integer.parseInt(chaine[9]),
-	        			tmpJoueur,Integer.parseInt(chaine[6]));
+	        		Robot tmpRobot1= new Robot(Integer.parseInt(chaine[4]),Integer.parseInt(chaine[5]),Integer.parseInt(chaine[6]),
+	        			tmpJoueur,Integer.parseInt(chaine[3]));
+	        		Robot tmpRobot2= new Robot(Integer.parseInt(chaine[8]),Integer.parseInt(chaine[9]),Integer.parseInt(chaine[10]),
+	        			tmpJoueur,Integer.parseInt(chaine[7]));
 	        		//on ajoute les robot au joueur
 	        		tmpJoueur.creeRobot(tmpRobot1,tmpRobot2);
 	        		//on ajoute les 2 rebot du joueur au pion

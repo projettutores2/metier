@@ -19,6 +19,6 @@ public class Cristal extends Pion
 
 	public String toString()
 	{
-		return super.toString() + "";
+		return "Cristal - coords " + this.x + ":" + this.y + ":" + this.z + "\n\tValeur : " + this.valeur;
 	}
 }
