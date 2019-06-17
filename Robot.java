@@ -12,6 +12,10 @@ public class Robot extends Pion
 
 	private int direction;
 
+	/*---------------*/
+	/* CONSTRUCTEURS */
+	/*---------------*/
+
 	public Robot( int x, int y, int z, Joueur j, int dir )
 	{
 		super( x, y, z );
@@ -28,8 +32,15 @@ public class Robot extends Pion
 		this( 0, 0, 0, j, 0 );
 	}
 
-	public Ordre[] getAlgo() { return this.algo; }
-	public Cristal getCristal() { return this.cristal; }
+
+
+	/*---------------*/
+	/*    GETTERS    */
+	/*---------------*/
+
+	public Ordre[] getAlgo()         { return this.algo;    }
+	public Ordre   getOrdre( int i ) { return this.algo[i]; }
+	public Cristal getCristal()      { return this.cristal; }
 
 	public int[] getProchainesCoords()
 	{
@@ -46,6 +57,20 @@ public class Robot extends Pion
 
 		return coordTemp;
 	}
+
+
+
+	/*---------------*/
+	/*    SETTERS    */
+	/*---------------*/
+
+	public void setOrdre( int i, Ordre o ) { this.algo[i] = o; }
+
+
+
+	/*---------------*/
+	/*    AUTRES     */
+	/*---------------*/
 
 	public boolean avancer()
 	{
@@ -86,7 +111,6 @@ public class Robot extends Pion
 			}
 		}
 	}
-
 
 	public void changerDirection( char sens )
 	{
