@@ -49,4 +49,11 @@ public abstract class Pion
 		this.y = y;
 		this.z = z;
 	}
+
+	public String toString()
+	{
+		String s = this.getClass().getSimpleName();
+
+		s += " - " + this.x + ":" + this.y + ":" + this.z;
+	}
 }

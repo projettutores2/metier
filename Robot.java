@@ -164,9 +164,4 @@ public class Robot extends Pion
 			this.cristal = null;
 		}
 	}
-
-	public String toString()
-	{
-		return "Robot - coords " + this.x + ":" + this.y + ":" + this.z;
-	}
 }
