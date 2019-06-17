@@ -7,7 +7,7 @@
 public class Robot extends Pion
 {
 	private Cristal cristal;
-	private Ordres[] algo;
+	private Ordre[] algo;
 	private Joueur joueur;
 
 	private int direction;
@@ -19,13 +19,11 @@ public class Robot extends Pion
 		this.joueur = j;
 		this.direction = dir;
 
-		this.algo = new Ordres[3];
+		this.algo = new Ordre[3];
 	}
 
 	public boolean deposer( Cristal c )
 	{
-		Base b = this.joueur.getBase();
-
 		switch ( this.direction )
 		{
 			case 0: this.z--; break;
@@ -35,11 +33,7 @@ public class Robot extends Pion
 			case 4: this.x--; break;
 			case 5: this.y++; break;
 		}
-
-		for ( Pion p : this.joueur.getListePions() )
-		{
-
-		}
+		return false;
 	}
 	public void avancer(){}
 	public void changerDirection(char sens){}
