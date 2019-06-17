@@ -39,7 +39,7 @@ public class Robot extends Pion
 	/*---------------*/
 
 	public Ordre[] getAlgo()         { return this.algo;    }
-	public Ordre   getOrdre( int i ) { return this.algo[i]; }
+	public Ordre   getOrdre( int i ) { return this.algo[i]; }
 	public Cristal getCristal()      { return this.cristal; }
 
 	public int[] getProchainesCoords()
@@ -64,7 +64,7 @@ public class Robot extends Pion
 	/*    SETTERS    */
 	/*---------------*/
 
-	public void setOrdre( int i, Ordre o ) { this.algo[i] = o; }
+	public void setOrdre( int i, Ordre o ) { this.algo[i] = o; }
 
 
 
