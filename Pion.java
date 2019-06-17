@@ -34,7 +34,7 @@ public abstract class Pion
 	{
 		for ( Pion p : this.joueur.getListePions() )
 		{
-			if ( collision( setCoord(), p ) )
+			if ( collision( setCoord, p ) )
 			{
 				return p;
 			}
