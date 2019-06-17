@@ -41,4 +41,8 @@ public class Robot extends Pion
 
 		}
 	}
+	public void avancer(){}
+	public void changerDirection(char sens){}
+	public void charger(){}
+	public void decharger(){}
 }
