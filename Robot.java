@@ -19,6 +19,7 @@ public class Robot extends Pion
 		this.joueur = j;
 		this.direction = dir;
 
+		this.cristal = null;
 		this.algo = new Ordre[3];
 	}
 
@@ -72,15 +73,15 @@ public class Robot extends Pion
 				//robot aux anciennes coordonnées du pion
 				if ( this.collision( coordTemp, this.getPionCollision( coordTemp, this.joueur ) ) )
 				{
-					this.getPionCollision( coordTemp, this.joueur ).setX( coordTemp[0] );
-					this.getPionCollision( coordTemp, this.joueur ).setY( coordTemp[1] );
-					this.getPionCollision( coordTemp, this.joueur ).setZ( coordTemp[2] );
+					this.getPionCollision( coordTemp, this.joueur ).setPos( coordTemp[0], 
+					                                                        coordTemp[1],
+					                                                        coordTemp[2] );
 
 					//Déplacement du robot
 					coordTemp = this.getProchainesCoords();
-					this.setX( coordTemp[0] );
-					this.setY( coordTemp[1] );
-					this.setZ( coordTemp[2] );
+					this.x = coordTemp[0];
+					this.y = coordTemp[1];
+					this.z = coordTemp[2];
 				}
 			}
 		}
@@ -102,14 +103,41 @@ public class Robot extends Pion
 	{
 		int[] coordTemp = this.getProchainesCoords();
 
-		if ( Pion.getPionCollision( coordTemp, this.joueur ) instanceof Cristal )
+		if ( this.getPionCollision( coordTemp, this.joueur ) instanceof Cristal )
 		{
+			this.cristal = this.getPionCollision( coordTemp, this.joueur );
+			//A tester
+			//this.getPionCollision( coordTemp, this.joueur ) = null;
 
+			//Autre moyen
+			Pion pTemp = this.getPionCollision( coordTemp, this.joueur );
+			for ( Pion p : this.joueur.getListePions() )
+			{
+				if ( p.equals( pTemp ) )
+				{
+					this.joueur.getListePions().remove( p );
+				}
+			}
 		}
 	}
 
 	public void decharger()
 	{
+		int[] coordTemp = this.getProchainesCoords();
 
+		//Si on lache le cristal sur une Base
+		if ( this.getPionCollision( coordTemp, this.joueur ) instanceof Base )
+		{
+			((Base)( this.getPionCollision( coordTemp, this.joueur ) )).stocker( this.cristal );
+			this.cristal = null;
+		}
+		else if ( this.getPionCollision( coordTemp, this.joueur ) == null )
+		{
+			this.joueur.getListePions().add( new Cristal( coordTemp[0],
+			                                              coordTemp[1],
+			                                              coordTemp[2],
+			                                              this.cristal.getValeur() ) );
+			this.cristal = null;
+		}
 	}
 }
