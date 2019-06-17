@@ -9,6 +9,7 @@ public class Regle
 
 	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,Metier metier)
 	{
+		Regle.scanner(joueurs,nbJoueur,pions,metier);
 		EnumOrdre enumTmp = null ;
 		Ordre tmp = null;
 		for(Joueur joueur : joueurs)
@@ -23,19 +24,20 @@ public class Regle
 		}
 	}
 
-	private void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,Metier metier)
+	private static void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,Metier metier)
 	{
 		try
 	    {
 	      Scanner sc = new Scanner (new FileReader ("map"+nbJoueur+".data"));
 	      String[] chaine ;
+	      int cpt ;
 
 	      while ( sc.hasNextLine() )
 	      {
 	        chaine = sc.nextLine().split(":");
 	        if(chaine[0].equals("joueur"))
 	        {
-	        	if(chaine[1].equals("nom"))
+	        	if(chaine[1].equals("nom") && chaine.length >=9)
 	        	{
 	        		//on cree un nouveau joueur et on l'ajoute
 	        		Joueur tmpJoueur = new Joueur (chaine[2],metier);
@@ -51,7 +53,7 @@ public class Regle
 	        		pions.add(tmpRobot1);
 	        		pions.add(tmpRobot2);
 	        	}
-	        	if(chaine[1].equals("base"))
+	        	if(chaine[1].equals("base") && chaine.length >=4)
 	        	{
 	        		Base tmpBase = new Base(Integer.parseInt(chaine[2]),Integer.parseInt(chaine[3]),Integer.parseInt(chaine[4]));
 	        		if(tmpBase!=null) pions.add(tmpBase);
@@ -61,7 +63,7 @@ public class Regle
 	        {
 				if(chaine[1].equals("bleu"))
 				{
-					int cpt =3 ;
+					cpt =3 ;
 					for(int i = 0 ; i<Integer.parseInt(chaine[2]);i++)
 					{
 						Cristal cristal = new Cristal (Integer.parseInt(chaine[cpt++]),Integer.parseInt(chaine[cpt++]),Integer.parseInt(chaine[cpt++]),CRISTAL_BLEU);
@@ -70,7 +72,12 @@ public class Regle
 				}
 				if(chaine[1].equals("vert"))
 				{
-
+					 cpt =3 ;
+					for(int i = 0 ; i<Integer.parseInt(chaine[2]);i++)
+					{
+						Cristal cristal = new Cristal (Integer.parseInt(chaine[cpt++]),Integer.parseInt(chaine[cpt++]),Integer.parseInt(chaine[cpt++]),CRISTAL_VERT);
+						if(cristal != null) pions.add(cristal);
+					}
 				}
 	        }
 	      }
