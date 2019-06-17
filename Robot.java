@@ -46,52 +46,44 @@ public class Robot extends Pion
 		return coordTemp;
 	}
 
-	public void avancer()
+	public boolean avancer()
 	{
 		//Déplacement fictif du pion pour vérifier qu'il y a une collision après
-		int[] coordTemp;
+		int[] coordTemp = this.getProchainesCoords();
 
-		for ( Pion p : this.joueur.getListePions() )
+		//Si le pion de la case devant n'est pas null (donc case occupée)
+		if ( this.getPionCollision( coordTemp, this.joueur ) != null )
 		{
-			coordTemp = this.getProchainesCoords();
-
-			if ( this.collision( coordTemp, p ) )
+			//Si la collision a lieu avec un Pion autre qu'une base
+			if ( !( this.getPionCollision( coordTemp, this.joueur ) instanceof Base ) )
 			{
-				//Si la collision a lieu avec un Pion autre qu'une base
-				if ( !p.getClass().getSimpleName().equals( "Base" ) )
-				{
-					//On déplace le pion dans le sens de la direction
-					switch ( this.direction ) {
-						case 0: coordTemp[2]--;coordTemp[0]++; break;
-						case 1: coordTemp[0]++;coordTemp[1]--; break;
-						case 2: coordTemp[1]--;coordTemp[2]++; break;
-						case 3: coordTemp[2]++;coordTemp[0]--; break;
-						case 4: coordTemp[0]--;coordTemp[1]++; break;
-						case 5: coordTemp[1]++;coordTemp[2]--; break;
-					}
+				//On déplace le pion dans le sens de la direction
+				switch ( this.direction ) {
+					case 0: coordTemp[2]--;coordTemp[0]++; break;
+					case 1: coordTemp[0]++;coordTemp[1]--; break;
+					case 2: coordTemp[1]--;coordTemp[2]++; break;
+					case 3: coordTemp[2]++;coordTemp[0]--; break;
+					case 4: coordTemp[0]--;coordTemp[1]++; break;
+					case 5: coordTemp[1]++;coordTemp[2]--; break;
+				}
 
-					//On vérifie que la place est libre pour le pion à pousser
-					//Si oui, le pion à pousser est poussé et on déplace notre
-					//robot aux anciennes coordonnées du pion
-					for ( Pion p2 : this.joueur.getListePions() )
-					{
-						//Si p2 est le pion qui était sur la nouvelle place du
-						//robot actuel, on le déplace
-						if ( this.collision( coordTemp, p2 ) )
-						{
-							p2.setX( coordTemp[0] );
-							p2.setY( coordTemp[1] );
-							p2.setZ( coordTemp[2] );
-						}
-					}
+				//On vérifie que la place est libre pour le pion à pousser
+				//Si oui, le pion à pousser est poussé et on déplace notre
+				//robot aux anciennes coordonnées du pion
+				if ( this.collision( coordTemp, this.getPionCollision( coordTemp, this.joueur ) ) )
+				{
+					this.getPionCollision( coordTemp, this.joueur ).setX( coordTemp[0] );
+					this.getPionCollision( coordTemp, this.joueur ).setY( coordTemp[1] );
+					this.getPionCollision( coordTemp, this.joueur ).setZ( coordTemp[2] );
+
+					//Déplacement du robot
+					coordTemp = this.getProchainesCoords();
+					this.setX( coordTemp[0] );
+					this.setY( coordTemp[1] );
+					this.setZ( coordTemp[2] );
 				}
 			}
 		}
-
-		coordTemp = this.getProchainesCoords();
-		this.setX( coordTemp[0] );
-		this.setY( coordTemp[1] );
-		this.setZ( coordTemp[2] );
 	}
 
 
@@ -110,10 +102,13 @@ public class Robot extends Pion
 	{
 		int[] coordTemp = this.getProchainesCoords();
 
-		//code ça vite benji
+		if ( Pion.getPionCollision( coordTemp, this.joueur ) instanceof Cristal )
+		{
+
+		}
 	}
 
-	public void decharger( Cristal c )
+	public void decharger()
 	{
 
 	}
