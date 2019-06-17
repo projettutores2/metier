@@ -4,6 +4,8 @@ import java.io.FileReader;
 public class Regle
 {
 	private final static String[] NOM_ORDRE= {"avancer","avancerDouble","rotationDroite","rotationGauche","charger","decharger"};
+	private final static int CRISTAL_VERT = 2;
+	private final static int CRISTAL_BLEU = 3;
 
 	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,Metier metier)
 	{
@@ -35,17 +37,41 @@ public class Regle
 	        {
 	        	if(chaine[1].equals("nom"))
 	        	{
+	        		//on cree un nouveau joueur et on l'ajoute
 	        		Joueur tmpJoueur = new Joueur (chaine[2],metier);
-	        		if(tmpJoueur!=null) joueurs.add(tmp);
-	        		Robot tmpRobot1= new Robot(Interger.parseInt(chaine[2]),Interger.parseInt(chaine[2]),Interger.parseInt(chaine[2]));
-	        		Robot tmpRobot2= new Robot(Interger.parseInt(chaine[2]),Interger.parseInt(chaine[2]),Interger.parseInt(chaine[2]));
+	        		if(tmpJoueur!=null) joueurs.add(tmpJoueur);
+	        		//on cree c'est 2 robot
+	        		Robot tmpRobot1= new Robot(Integer.parseInt(chaine[3]),Integer.parseInt(chaine[4]),Integer.parseInt(chaine[5]),
+	        			tmpJoueur,Integer.parseInt(chaine[2]));
+	        		Robot tmpRobot2= new Robot(Integer.parseInt(chaine[7]),Integer.parseInt(chaine[8]),Integer.parseInt(chaine[9]),
+	        			tmpJoueur,Integer.parseInt(chaine[6]));
+	        		//on ajoute les robot au joueur
 	        		tmpJoueur.creeRobot(tmpRobot1,tmpRobot2);
+	        		//on ajoute les 2 rebot du joueur au pion
+	        		pions.add(tmpRobot1);
+	        		pions.add(tmpRobot2);
 	        	}
 	        	if(chaine[1].equals("base"))
 	        	{
-	        		Base tmpBase = new Base(Interger.parseInt(chaine[2]),Interger.parseInt(chaine[3]),Interger.parseInt(chaine[4]));
-	        		if(tmpBase!=null) pions.add(tmp);
+	        		Base tmpBase = new Base(Integer.parseInt(chaine[2]),Integer.parseInt(chaine[3]),Integer.parseInt(chaine[4]));
+	        		if(tmpBase!=null) pions.add(tmpBase);
 	        	}
+	        }
+	    	if(chaine[0].equals("cristal"))
+	        {
+				if(chaine[1].equals("bleu"))
+				{
+					int cpt =3 ;
+					for(int i = 0 ; i<Integer.parseInt(chaine[2]);i++)
+					{
+						Cristal cristal = new Cristal (Integer.parseInt(chaine[cpt++]),Integer.parseInt(chaine[cpt++]),Integer.parseInt(chaine[cpt++]),CRISTAL_BLEU);
+						if(cristal != null) pions.add(cristal);
+					}
+				}
+				if(chaine[1].equals("vert"))
+				{
+
+				}
 	        }
 	      }
 	      sc.close();

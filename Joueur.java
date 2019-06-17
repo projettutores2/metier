@@ -1,4 +1,4 @@
-import java.util.list;
+import java.util.ArrayList;
 
 public class Joueur
 {
@@ -8,7 +8,7 @@ public class Joueur
 	private Robot[] ensRobots;
 	private int nbPoint;
 	
-	public Joueur(Metier metier)
+	public Joueur(String nom,Metier metier)
 	{
 		this.nom         = nom;
 		this.metier      = metier;
@@ -17,7 +17,7 @@ public class Joueur
 		this.nbPoint     = 0;
 	}
 
-	public void ajouterOrdre (Ordre newOrdre)
+	public void ajouter(Ordre newOrdre)
 	{
 		this.stockOrdres.add(newOrdre);
 	}
@@ -30,7 +30,7 @@ public class Joueur
 	
 	public void setPosRobot(int x, int y, int z, int indRobot)
 	{
-		this.ensRobots[intRobot].setPos(x,y,z);
+		this.ensRobots[indRobot].setPos(x,y,z);
 	}
 	
 	//Set
@@ -47,6 +47,7 @@ public class Joueur
 	
 	public ArrayList<Pion> getListePions()
 	{
-		return this.metier.getListePions;
+		return this.metier.getListePions();
 	}
+	public String getNom(){return this.nom;}
 }
