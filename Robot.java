@@ -39,7 +39,7 @@ public class Robot extends Pion
 	/*---------------*/
 
 	public Ordre[] getAlgo()         { return this.algo;    }
-	public Ordre   getOrdre( int i ) { return this.algo[i]; }
+	public Ordre   getOrdre( int i ) { return this.algo[i]; }
 	public Cristal getCristal()      { return this.cristal; }
 
 	public int[] getProchainesCoords()
@@ -64,7 +64,7 @@ public class Robot extends Pion
 	/*    SETTERS    */
 	/*---------------*/
 
-	public void setOrdre( int i, Ordre o ) { this.algo[i] = o; }
+	public void setOrdre( int i, Ordre o ) { this.algo[i] = o; }
 
 
 
@@ -72,7 +72,7 @@ public class Robot extends Pion
 	/*    AUTRES     */
 	/*---------------*/
 
-	public boolean avancer()
+	public void avancer()
 	{
 		//Déplacement fictif du pion pour vérifier qu'il y a une collision après
 		int[] coordTemp = this.getProchainesCoords();
@@ -163,5 +163,10 @@ public class Robot extends Pion
 			                                              this.cristal.getValeur() ) );
 			this.cristal = null;
 		}
+	}
+
+	public String toString()
+	{
+		return "Robot - coords " + this.x + ":" + this.y + ":" + this.z;
 	}
 }

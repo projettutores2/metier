@@ -33,4 +33,9 @@ public class Base extends Pion
 
 		return retour;
 	}
+
+	public String toString()
+	{
+		return "Base - coords " + this.x + ":" + this.y + ":" + this.z + "\n\tScore : " + this.getScore();
+	}
 }
