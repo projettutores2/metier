@@ -1,6 +1,12 @@
 public  class Ordre
 {
+	protected String txt ;
+	public Ordre(String txt)
+	{
+		this.txt=txt;
+	}
 	public void action(){}
+	public String toString() {return this.txt ;}
 }
 
 
@@ -10,6 +16,7 @@ class Avancer extends Ordre
 
 	public Avancer(int multiple)
 	{
+		super("Avancer"+(mulitple == 1 ? " simple":" double"));
 		this.multiple=multiple;
 	}
 	
@@ -25,6 +32,7 @@ class Rotation extends Ordre
 	char sens ;
 	public Rotation(char sens)
 	{
+		super("Rotation"+(sens == 'D' ? " droite":" gauche"));
 		this.sens=sens;
 	}
 	
@@ -38,7 +46,9 @@ class Charger extends Ordre
 {
 
 	public Charger()
-	{}
+	{
+		super("Charger");
+	}
 	
 	public void action(Robot robot)
 	{
@@ -48,7 +58,9 @@ class Charger extends Ordre
 class Decharger extends Ordre
 {
 	public Decharger()
-	{}
+	{
+		super("Decharger");
+	}
 	
 	public void action(Robot robot)
 	{

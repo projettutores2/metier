@@ -1,9 +1,9 @@
 public enum EnumOrdre
 {
 	avancer        ("avancer"        ,2),
-	avancerDouble  ("avancerDouble"  ,2),
-	rotationDroite ("rotationDroite" ,2),
-	rotationGauche ("rotationGauche" ,2),
+	avancerDouble  ("avancerDouble"  ,1),
+	rotationDroite ("rotationDroite" ,3),
+	rotationGauche ("rotationGauche" ,3),
 	charger        ("charger"        ,2),
 	decharger      ("decharger"      ,2);
 
@@ -36,4 +36,7 @@ public enum EnumOrdre
 		}
 		return tmp ;
 	}
+
+	public int getNombre() { return this.nombre;}
+
 }
