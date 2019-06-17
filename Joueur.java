@@ -17,6 +17,11 @@ public class Joueur
 		this.nbPoint     = 0;
 	}
 
+	public void ajouterOrdre (Ordre newOrdre)
+	{
+		this.stockOrdres.add(newOrdre);
+	}
+	
 	public void creeRobot(Robot robot1, Robot robot2)
 	{
 		this.ensRobots[0] = robot1;
@@ -28,11 +33,13 @@ public class Joueur
 		this.ensRobots[intRobot].setPos(x,y,z);
 	}
 	
-	public void ajouterOrdre (Ordre newOrdre)
+	//Set
+	public void setNom(String nom)
 	{
-		this.stockOrdres.add(newOrdre);
+		this.nom = nom;
 	}
 	
+	//Get
 	public ArrayList<Pion> getListePions()
 	{
 		this.metier.getListePions;
