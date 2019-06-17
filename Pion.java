@@ -30,11 +30,11 @@ public abstract class Pion
 			     setCoord[2] == p.z    );
 	}
 
-	public Pion getPionCollision()
+	public Pion getPionCollision( int[] setCoord )
 	{
 		for ( Pion p : this.joueur.getListePions() )
 		{
-			if ( verifCoordCible( this.getCoords(), p ) )
+			if ( collision( setCoord(), p ) )
 			{
 				return p;
 			}
