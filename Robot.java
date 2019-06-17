@@ -35,7 +35,7 @@ public class Robot extends Pion
 			case 1: this.x++;this.y--; break;
 			case 2: this.y--;this.z++; break;
 			case 3: this.z++;this.x--; break;
-			case 4: this.x--;this.y--; break;
+			case 4: this.x--;this.y++; break;
 			case 5: this.y++;this.z--; break;
 		}
 	}
