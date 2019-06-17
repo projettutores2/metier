@@ -7,7 +7,7 @@
 public class Robot extends Pion
 {
 	private Cristal cristal;
-	private Ordres[] algo;
+	private Ordre[] algo;
 	private Joueur joueur;
 
 	private int direction;
@@ -19,13 +19,11 @@ public class Robot extends Pion
 		this.joueur = j;
 		this.direction = dir;
 
-		this.algo = new Ordres[3];
+		this.algo = new Ordre[3];
 	}
 
 	public boolean deposer( Cristal c )
 	{
-		Base b = this.joueur.getBase();
-
 		//Déplacement du pion pour vérifier qu'il y a une collision après
 		switch ( this.direction ) {
 			case 0: this.z--; break;
