@@ -15,12 +15,17 @@ public class Regle
 		Ordre tmp = null;
 		for(Joueur joueur : joueurs)
 		{
-			enumTmp=EnumOrdre.valueOf(Regle.NOM_ORDRE[0]);
-			for(int i = 1 ;i <enumTmp.getNombre();i++)
+			for(int j =0 ; j<Regle.NOM_ORDRE.length;j++)
 			{
-				if(enumTmp != null) tmp = enumTmp.creeOrdre();
-				if(tmp     != null) joueur.ajouter(tmp);
-				enumTmp = EnumOrdre.valueOf(Regle.NOM_ORDRE[i]);
+				enumTmp=EnumOrdre.valueOf(Regle.NOM_ORDRE[j]);
+				if(enumTmp != null)
+				{
+					for(int i = 0 ;i <enumTmp.getNombre();i++)
+					{
+					    tmp = enumTmp.creeOrdre();
+						if(tmp     != null) joueur.ajouter(tmp);
+					}
+				}
 			}
 		}
 	}
