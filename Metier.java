@@ -56,7 +56,7 @@ public class Metier
 			}
 
 			//Activation des algorithme
-			
+
 
 			//Vérification de fin de partie
 			if(this.end) break;
@@ -129,7 +129,15 @@ public class Metier
 
 	//--------------------------------------------------------------
 	//                             GET
-	public Joueur getJoueurs(String nom) { for(Joueur joueur : this.joueurs) { if(joueur.getNom().equals(nom)) return joueur; } return null ; }
+	public Joueur getJoueurs(String nom)
+	{
+		for(Joueur joueur : this.joueurs)
+		{
+			if(joueur.getNom().equals(nom))
+				return joueur;
+		}
+		return null ;
+	}
 
 	public boolean getEnd() {return this.end ;}
 	
