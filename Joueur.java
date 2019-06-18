@@ -1,19 +1,13 @@
-/** Joueur
-  * date : 17/08/2019
-  * @author : Equipe 14
-  * @version 1
-  */
-
 package TwinTinBots.metier;
 import java.util.ArrayList;
 
 public class Joueur
 {
-	private String           nom;
-	private Metier           metier;
+	private String nom;
+	private Metier metier;
 	private ArrayList<Ordre> stockOrdres;
-	private Robot[]          ensRobots;
-	private int              nbPoint;
+	private Robot[] ensRobots;
+	private int nbPoint;
 	
 	public Joueur(String nom,Metier metier)
 	{
@@ -35,14 +29,12 @@ public class Joueur
 
 	public void ajouter(Ordre newOrdre)
 	{
-		if(newOrdre != null ) this.stockOrdres.add(newOrdre);
+		this.stockOrdres.add(newOrdre);
 	}
 
 	public Ordre retirer(int indice)
 	{
-		if(indice < this.stockOrdres.size())
-			 return this.stockOrdres.remove(indice);
-		else return null ;
+		return this.stockOrdres.remove(indice);
 	}
 	
 	public void creeRobot(Robot robot1, Robot robot2)
@@ -53,8 +45,7 @@ public class Joueur
 	
 	public void setPosRobot(int x, int y, int z, int indRobot)
 	{
-		if(indRobot < this.ensRobots.length)
-			this.ensRobots[indRobot].setPos(x,y,z);
+		this.ensRobots[indRobot].setPos(x,y,z);
 	}
 	
 	//Set
@@ -66,9 +57,7 @@ public class Joueur
 	//Get
 	public Robot getRobot(int indRobot)
 	{
-		if(indRobot < this.ensRobots.length)
-		     return this.ensRobots[indRobot];
-		else return null ;
+		return this.ensRobots[indRobot];
 	}
 	
 	public ArrayList<Ordre> getStockOrdres()
