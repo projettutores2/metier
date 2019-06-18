@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class Base extends Pion
 {
 	private ArrayList<Cristal> stockCristaux;
+	private Joueur joueur;
 
-	public Base( int x, int y, int z )
+	public Base( Joueur j, int x, int y, int z )
 	{
 		super( x, y, z );
 
+		this.joueur = j;
 		this.stockCristaux = new ArrayList<Cristal>();
 	}
 
@@ -36,6 +38,6 @@ public class Base extends Pion
 
 	public String toString()
 	{
-		return "Base - coords " + this.x + ":" + this.y + ":" + this.z + "\n\tScore : " + this.getScore();
+		return "Base - coords " + this.x + ":" + this.y + ":" + this.z + "\n\tScore : " + this.getScore() + "\n\tJoueur : " + this.joueur.getNom();
 	}
 }
