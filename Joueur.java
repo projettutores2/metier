@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class Joueur
 {
-	private Metier metier;
 	private String nom;
+	private Metier metier;
 	private ArrayList<Ordre> stockOrdres;
 	private Robot[] ensRobots;
 	private int nbPoint;
@@ -17,9 +17,23 @@ public class Joueur
 		this.nbPoint     = 0;
 	}
 
+	public Joueur(Joueur joueur)
+	{
+		this.nom         = joueur.nom;
+		this.metier      = joueur.metier;
+		this.stockOrdres = joueur.getStockOrdres();
+		this.ensRobots   = joueur.ensRobots;
+		this.nbPoint     = joueur.nbPoint;
+	}
+
 	public void ajouter(Ordre newOrdre)
 	{
 		this.stockOrdres.add(newOrdre);
+	}
+
+	public Ordre retirer(int ind)
+	{
+		return this.stockOrdres.remove(ind);
 	}
 	
 	public void creeRobot(Robot robot1, Robot robot2)
@@ -45,9 +59,20 @@ public class Joueur
 		return this.ensRobots[indRobot];
 	}
 	
+	public ArrayList<Ordre> getStockOrdres()
+	{
+		ArrayList<Ordre> tmp = new ArrayList<Ordre>();
+
+		for(Ordre ordre : this.stockOrdres)
+			tmp.add(ordre);
+
+		return tmp;
+	}
+
 	public ArrayList<Pion> getListePions()
 	{
 		return this.metier.getListePions();
 	}
+
 	public String getNom(){return this.nom;}
 }
