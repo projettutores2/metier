@@ -18,7 +18,7 @@ public class Metier
 		this.pions   = new ArrayList<Pion>();
 
 		//a la charge de creer et donner les ordres
-		Regle.initialisation(this.joueurs,2,this.pions,this);
+		Regle.initialisation(this.joueurs,4,this.pions,this);
 	}
 
 	public void jouer()
@@ -89,6 +89,8 @@ public class Metier
 	//--------------------------------------------------------------
 	//                             GET
 	public boolean getEnd() {return this.end ;}
+
+	public int getNbJoueurs() { return this.joueurs.size(); }
 	
 	public ArrayList<Pion> getListePions()
 	{

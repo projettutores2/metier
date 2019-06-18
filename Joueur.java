@@ -1,13 +1,19 @@
+/** Joueur
+  * date : 17/08/2019
+  * @author : Equipe 14
+  * @version 1
+  */
+
 package TwinTinBots.metier;
 import java.util.ArrayList;
 
 public class Joueur
 {
-	private String nom;
-	private Metier metier;
+	private String           nom;
+	private Metier           metier;
 	private ArrayList<Ordre> stockOrdres;
-	private Robot[] ensRobots;
-	private int nbPoint;
+	private Robot[]          ensRobots;
+	private int              nbPoint;
 	
 	public Joueur(String nom,Metier metier)
 	{
@@ -29,12 +35,14 @@ public class Joueur
 
 	public void ajouter(Ordre newOrdre)
 	{
-		this.stockOrdres.add(newOrdre);
+		if(newOrdre != null ) this.stockOrdres.add(newOrdre);
 	}
 
 	public Ordre retirer(int indice)
 	{
-		return this.stockOrdres.remove(indice);
+		if(indice < this.stockOrdres.size())
+			 return this.stockOrdres.remove(indice);
+		else return null ;
 	}
 	
 	public void creeRobot(Robot robot1, Robot robot2)
@@ -45,7 +53,8 @@ public class Joueur
 	
 	public void setPosRobot(int x, int y, int z, int indRobot)
 	{
-		this.ensRobots[indRobot].setPos(x,y,z);
+		if(indRobot < this.ensRobots.length)
+			this.ensRobots[indRobot].setPos(x,y,z);
 	}
 	
 	//Set
@@ -57,7 +66,9 @@ public class Joueur
 	//Get
 	public Robot getRobot(int indRobot)
 	{
-		return this.ensRobots[indRobot];
+		if(indRobot < this.ensRobots.length)
+		     return this.ensRobots[indRobot];
+		else return null ;
 	}
 	
 	public ArrayList<Ordre> getStockOrdres()
@@ -74,6 +85,8 @@ public class Joueur
 	{
 		return this.metier.getListePions();
 	}
+
+	public int getNbJoueurs() { return this.metier.getNbJoueurs(); }
 
 	public String getNom(){return this.nom;}
 }
