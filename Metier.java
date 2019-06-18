@@ -25,49 +25,60 @@ public class Metier
 	{
 		int choix;
 		Ordre tmp;
-		for(Joueur joueur : joueurs)
+		boolean erreur;
+		for(Joueur joueur : this.joueurs)
 		{
 			//Choix du joueur pour la modification de son algorithme
-
 			this.ctrl.afficherAlgo(new Joueur(joueur));
 			
 			do
 			{
-				choix = this.ctrl.demandeAction();
-			}
-			while(choix<1 || choix>5);
+				do
+				{
+					choix = this.ctrl.demandeAction();
+				}
+				while(choix<1 || choix>5);
 			
-			switch (choix)
-			{
-				case 1:						
-					this.placerOrdre(joueur);
-					break;
-				case 2:
-					this.permuterOrdre(joueur);
-					break;
-				case 3:
-					this.retirerOrdre(joueur, -1);
-					break;
-				case 4:
-					this.redemarrerRobot(joueur);
-					break;
-				default :
-					break;
+				switch (choix)
+				{
+					case 1: erreur=this.placerOrdre(joueur); break;
+					case 2: erreur=this.permuterOrdre(joueur); break;
+					case 3: erreur=this.retirerOrdre(joueur, -1); break;
+					case 4: erreur=this.redemarrerRobot(joueur); break;
+					default :
+						erreur = false;
+						break;
+				}
 			}
+			while(erreur);
 
 			//Activation des algorithme
-
+			this.executionAlgo(joueur, 0);
+			this.executionAlgo(joueur, 1);		
 
 			//Vérification de fin de partie
 			if(this.end) break;
 		}
 	}
 
-	public void placerOrdre(Joueur joueur)
+	private void executionAlgo(Joueur joueur, int idRobot)
+	{
+		for(Ordre ordre : joueur.getRobot(idRobot).getAlgo())
+				if(ordre!=null)
+				{
+					try{Thread.sleep(500);}
+					catch(Exception e){}
+					ordre.action(joueur.getRobot(idRobot));
+					this.ctrl.afficherJeu();
+				}
+	}
+
+	private boolean placerOrdre(Joueur joueur)
 	{
 		int nouvelOrdre = this.ctrl.choisirOrdreJoueur(new Joueur(joueur));
 						
 		int   slot = this.ctrl.choisirSlot();
+		if( slot<0 || slot>5 ) return true;
 		Ordre tmp  = joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3);
 		if(tmp!=null)
 		{
@@ -79,51 +90,52 @@ public class Metier
 		{
 			joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3,joueur.retirer(nouvelOrdre));
 		}
+		return false;
 	}
 
-	public void permuterOrdre(Joueur joueur)
+	private boolean permuterOrdre(Joueur joueur)
 	{
 		int slot1, slot2;
-		do
-		{
-			slot1 = this.ctrl.choisirSlot();
-			slot2 = this.ctrl.choisirSlot();
-		}
-		while(slot1<3 != slot2<3);
+
+		slot1 = this.ctrl.choisirSlot();
+		slot2 = this.ctrl.choisirSlot();
+	
+		if(slot1<0 || slot1 >5 ||
+		   slot2<0 || slot2 >5 ||
+		   (slot1<3 != slot2<3)) return true;
 
 		Ordre tmp = joueur.getRobot((slot1 < 3 ? 0 : 1)).getOrdre(slot1%3);
 		joueur.getRobot((slot1 < 3 ? 0 : 1)).setOrdre(slot1%3, joueur.getRobot((slot2 < 3 ? 0 : 1)).getOrdre(slot2%3));
 		joueur.getRobot((slot2 < 3 ? 0 : 1)).setOrdre(slot2%3, tmp);
+		return false;
 	}
 
-	public void retirerOrdre(Joueur joueur, int slot)
+	private boolean retirerOrdre(Joueur joueur, int slot)
 	{
 		if(slot==-1)
 		{
-			do
-			{
-				slot = this.ctrl.choisirSlot();
-			}
-			while(joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3)==null);
+
+			slot = this.ctrl.choisirSlot();
+			if (slot < 0 || slot > 5 ) return true;
 		}
 
 		joueur.ajouter(joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3));
 		joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3, null);
+		return false;
 	}
 
-	public void redemarrerRobot(Joueur joueur)
+	private boolean redemarrerRobot(Joueur joueur)
 	{
 		int robot;
-		do
-		{
 			robot = this.ctrl.choisirRobot();
-		}
-		while(robot!=0 && robot!=1);
+		
+		if(robot!=0 && robot!=1) return true;
 
 		for(int i=0 ;  i<joueur.getRobot(robot).getAlgo().length ; i++)
 		{
 			retirerOrdre(joueur, i+robot*3);
 		}
+		return false;
 	}
 
 
@@ -137,6 +149,11 @@ public class Metier
 				return joueur;
 		}
 		return null ;
+	}
+
+	public int getNbJoueurs()
+	{
+		return this.joueurs.size();
 	}
 
 	public boolean getEnd() {return this.end ;}

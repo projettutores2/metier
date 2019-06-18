@@ -76,4 +76,10 @@ public class IHM
 						
 		return Clavier.lire_int()-1;
 	}
+
+	public void afficherJeu()
+	{
+		for(String pion : this.ctrl.getListePions())
+			System.out.println(pion);
+	}
 }

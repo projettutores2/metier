@@ -33,11 +33,11 @@ public abstract class Pion
 
 	public Pion getPionCollision( int[] setCoord, Joueur joueur )
 	{
-		for ( Pion p : joueur.getListePions() )
+		for ( Pion pion : joueur.getListePions() )
 		{
-			if ( collision( setCoord, p ) )
+			if ( collision( setCoord, pion ) )
 			{
-				return p;
+				return pion;
 			}
 		}
 		return null;

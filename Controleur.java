@@ -1,6 +1,8 @@
 package TwinTinBots.ihm;
 import TwinTinBots.metier.Metier;
 import TwinTinBots.metier.Joueur;
+import TwinTinBots.metier.Pion;
+import java.util.ArrayList;
 public class Controleur
 {
 	private IHM ihm ;
@@ -37,8 +39,18 @@ public class Controleur
 	public int    nombreDeJoueur () { return 2 ;      }
 	public String creeJoueur     () { return "teste ";}
 
+	public void afficherJeu() { this.ihm.afficherJeu(); }
+
 	//--------------------------------------------------------------
 	//                             GET
 	public IHM    getIhm()    { return this.ihm ;  }
 	public Metier getMetier() { return this.metier;}
+	public ArrayList<String> getListePions()
+	{
+		ArrayList<String> tmp = new ArrayList<String>();
+		for(Pion pion : this.metier.getListePions())
+			tmp.add(pion.toString());
+		return tmp;
+
+	}
 }

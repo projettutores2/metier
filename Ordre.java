@@ -6,7 +6,7 @@ public  class Ordre
 	{
 		this.txt=txt;
 	}
-	public void action(){}
+	public void action(Robot robot){}
 	public String toString() {return this.txt ;}
 }
 
