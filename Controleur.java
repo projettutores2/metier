@@ -19,6 +19,12 @@ public class Controleur
 	{
 		new Controleur();
 	}
+
+	//--------------------------------------------------------------
+	//                          LIEN AFFICHAGE
+	public void afficherAlgo(Joueur joueur)        { this.ihm.afficherAlgo(joueur);        }
+	public void afficherStockJoueur(Joueur joueur) { this.ihm.afficherStockJoueur(joueur); }
+	public int  demandeAction()                    { return this.ihm.demandeAction();      }
 	
 	//--------------------------------------------------------------
 	//                            LIEN SCANNER
