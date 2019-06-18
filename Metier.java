@@ -1,3 +1,5 @@
+package TwinTinBots.metier;
+import TwinTinBots.ihm.Controleur;
 import java.util.ArrayList;
 import iut.algo.*;
 
@@ -26,7 +28,7 @@ public class Metier
 		{
 			if(!this.end)
 			{
-				this.ctrl.afficherAlgo(joueur);
+				this.ctrl.afficherAlgo(new Joueur(joueur));
 				
 				do
 				{
@@ -39,7 +41,7 @@ public class Metier
 					case 1:
 						System.out.println("Quel ordre ajouter ?");
 						
-						this.ctrl.afficherStockJoueur(joueur);
+						this.ctrl.afficherStockJoueur(new Joueur(joueur));
 						
 						int nouvelOrdre = Clavier.lire_int();
 						
@@ -49,12 +51,12 @@ public class Metier
 						if(tmp!=null)
 						{
 							joueur.ajouter(tmp);
-							tmp = joueur.getStockOrdres().remove(nouvelOrdre);
+							tmp = joueur.retirer(nouvelOrdre);
 							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3, tmp);
 						}
 						else
 						{
-							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3,joueur.getStockOrdres().remove(nouvelOrdre));
+							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3,joueur.retirer(nouvelOrdre));
 						}
 						break;
 					case 2:
@@ -64,6 +66,8 @@ public class Metier
 			}
 		}
 	}
+
+	public Joueur getJoueurs(String nom) { for(Joueur joueur : this.joueurs) { if(joueur.getNom().equals(nom)) return joueur; } return null ; }
 
 	//--------------------------------------------------------------
 	//                             GET

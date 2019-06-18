@@ -1,3 +1,4 @@
+package TwinTinBots.ihm;
 public class Controleur
 {
 	private IHM ihm ;
