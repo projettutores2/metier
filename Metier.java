@@ -75,7 +75,7 @@ public class Metier
 						while(tmp==null);
 
 						joueur.ajouter(tmp);
-						joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot1%3, null);
+						joueur.getRobot((slot1 < 3 ? 0 : 1)).setOrdre(slot1%3, null);
 						break;
 					default :
 						break;
