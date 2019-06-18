@@ -92,6 +92,6 @@ public class Regle
 	      sc.close();
 	    }
 	    catch(Exception e) { e.printStackTrace(); }
-		}
+	}
 
 }
