@@ -19,16 +19,12 @@ public class Metier
 
 		//a la charge de creer et donner les ordres
 		Regle.initialisation(this.joueurs,2,this.pions,this);
-
-		for(Joueur joueur : joueurs)
-		{
-			this.ctrl.afficherStockJoueur(joueur);
-		}
 	}
 
 	public void jouer()
 	{
-		int choix;
+		int choix, nouvelOrdre, slot1, slot2;
+		Ordre tmp;
 		for(Joueur joueur : joueurs)
 		{
 			if(!this.end)
@@ -43,29 +39,45 @@ public class Metier
 				
 				switch (choix)
 				{
-					case 1:
-						System.out.println("Quel ordre ajouter ?");
+					case 1:						
+						nouvelOrdre = this.ctrl.choisirOrdreJoueur(new Joueur(joueur));
 						
-						this.ctrl.afficherStockJoueur(new Joueur(joueur));
-						
-						int nouvelOrdre = Clavier.lire_int();
-						
-						System.out.println("Dans quel slot voulez vous l'ajouter ?");
-						int slot    = Clavier.lire_int();
-						Ordre tmp = joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3);
+						slot1 = this.ctrl.choisirSlot();
+						tmp = joueur.getRobot((slot1 < 3 ? 0 : 1)).getOrdre(slot1%3);
 						if(tmp!=null)
 						{
 							joueur.ajouter(tmp);
 							tmp = joueur.retirer(nouvelOrdre);
-							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3, tmp);
+							joueur.getRobot((slot1 < 3 ? 0 : 1)).setOrdre(slot1%3, tmp);
 						}
 						else
 						{
-							joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3,joueur.retirer(nouvelOrdre));
+							joueur.getRobot((slot1 < 3 ? 0 : 1)).setOrdre(slot1%3,joueur.retirer(nouvelOrdre));
 						}
 						break;
 					case 2:
-						
+						do
+						{
+							slot1 = this.ctrl.choisirSlot();
+							slot2 = this.ctrl.choisirSlot();
+						}
+						while(slot1<3 != slot2<3);
+						tmp = joueur.getRobot((slot1 < 3 ? 0 : 1)).getOrdre(slot1%3);
+						joueur.getRobot((slot1 < 3 ? 0 : 1)).setOrdre(slot1%3, joueur.getRobot((slot2 < 3 ? 0 : 1)).getOrdre(slot2%3));
+						joueur.getRobot((slot2 < 3 ? 0 : 1)).setOrdre(slot2%3, tmp);
+						break;
+					case 3:
+						do
+						{
+							slot1 = this.ctrl.choisirSlot();
+							tmp   = joueur.getRobot((slot1 < 3 ? 0 : 1)).getOrdre(slot1%3);
+						}
+						while(tmp==null);
+
+						joueur.ajouter(tmp);
+						joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot1%3, null);
+						break;
+					default :
 						break;
 				}
 			}

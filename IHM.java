@@ -15,12 +15,25 @@ public class IHM
 	public void afficherAlgo(Joueur joueur)
 	{
 		int i = 0;
+		System.out.println(joueur.getNom());
 		System.out.println("Algorithme Robot 1 : ");
 		for(Ordre ordre : joueur.getRobot(0).getAlgo())
-			System.out.println("\t" + (++i) + ordre.toString());
+		{
+			System.out.print("\t" + (++i));
+			if(ordre!=null)
+				System.out.println(" - " + ordre.toString());
+			else
+				System.out.println();
+		}
 		System.out.println("Algorithme Robot 2 : ");
 		for(Ordre ordre : joueur.getRobot(1).getAlgo())
-			System.out.println("\t" + (++i) + ordre.toString());
+		{
+			System.out.print("\t" + (++i));
+			if(ordre!=null)
+				System.out.println(" - " + ordre.toString());
+			else
+				System.out.println();
+		}
 	}
 
 	public int demandeAction()
@@ -35,10 +48,26 @@ public class IHM
 		return Clavier.lire_int();
 	}
 
+	public int choisirSlot()
+	{
+		System.out.println("Choisir un slot :");
+		return Clavier.lire_int()-1;
+	}
+
 	public void afficherStockJoueur(Joueur joueur)
 	{
 		int i = 0;
+		System.out.println(joueur.getNom());
 		for(Ordre ordre : joueur.getStockOrdres())
-			System.out.println("\t" + (++i) + ordre.toString());
+			System.out.println("\t" + (++i) + " - " + ordre.toString());
+	}
+
+	public int choisirOrdreJoueur(Joueur joueur)
+	{
+		System.out.println("Quel ordre ajouter ?");
+						
+		this.afficherStockJoueur(new Joueur(joueur));
+						
+		return Clavier.lire_int()-1;
 	}
 }

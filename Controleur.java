@@ -15,7 +15,7 @@ public class Controleur
 		{
 			this.metier.jouer();
 		}
-		while(this.metier.getEnd());
+		while(!this.metier.getEnd());
 	}
 
 	public static void main(String[] agrs)
@@ -25,9 +25,11 @@ public class Controleur
 
 	//--------------------------------------------------------------
 	//                          LIEN AFFICHAGE
-	public void afficherAlgo(Joueur joueur)        { this.ihm.afficherAlgo(joueur);        }
-	public void afficherStockJoueur(Joueur joueur) { this.ihm.afficherStockJoueur(joueur); }
-	public int  demandeAction()                    { return this.ihm.demandeAction();      }
+	public void afficherAlgo(Joueur joueur)        { this.ihm.afficherAlgo(joueur);              }
+	public void afficherStockJoueur(Joueur joueur) { this.ihm.afficherStockJoueur(joueur);       }
+	public int  demandeAction()                    { return this.ihm.demandeAction();            }
+	public int  choisirSlot()                      { return this.ihm.choisirSlot();              }
+	public int  choisirOrdreJoueur(Joueur joueur)  { return this.ihm.choisirOrdreJoueur(joueur); }
 	
 	//--------------------------------------------------------------
 	//                            LIEN SCANNER
