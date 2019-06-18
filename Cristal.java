@@ -18,6 +18,12 @@ public class Cristal extends Pion
 
 	public String toString()
 	{
-		return "Cristal - coords " + this.x + ":" + this.y + ":" + this.z + "\n\tValeur : " + this.valeur;
+		String s = "Cristal - coords ";
+		s += String.format("%2d", this.x) + ":";
+		s += String.format("%2d", this.y) + ":";
+		s += String.format("%2d", this.z);
+		s += "\n\tValeur : " + this.valeur;
+
+		return s;
 	}
 }

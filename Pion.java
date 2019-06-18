@@ -54,7 +54,11 @@ public abstract class Pion
 	{
 		String s = this.getClass().getSimpleName();
 
-		s += " - " + this.x + ":" + this.y + ":" + this.z;
+		s += " - "; 
+		s += String.format("%-2d", this.x) + ":";
+		s += String.format("%-2d", this.y) + ":";
+		s += String.format("%-2d", this.z);
+
 		return s ;
 	}
 }

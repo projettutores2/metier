@@ -37,6 +37,12 @@ public class Robot extends Pion
 
 	public int[] getProchainesCoords()
 	{
+		/* Le tableau coordTemp regroupe les trois coordonnées d'un robot
+		 * Les indices correspondent à :
+		 *    =>   0 : x
+		 *    =>   1 : y
+		 *    =>   2 : z
+		 */
 		int[] coordTemp = this.getCoords();
 
 		switch ( this.direction ) {
@@ -91,6 +97,13 @@ public class Robot extends Pion
 			if ( !( this.getPionCollision( coordTemp, this.joueur ) instanceof Base ) )
 			{
 				//On déplace le pion dans le sens de la direction
+
+				/* Le tableau coordTemp regroupe les trois coordonnées d'un robot
+				 * Les indices correspondent à :
+				 *    =>   0 : x
+				 *    =>   1 : y
+				 *    =>   2 : z
+				 */
 				switch ( this.direction ) {
 					case 0: coordTemp[2]--;coordTemp[0]++; break;
 					case 1: coordTemp[0]++;coordTemp[1]--; break;
@@ -177,9 +190,9 @@ public class Robot extends Pion
 		}//Sinon, si on est en face d'un robot, on lui vole son cristal
 		else if ( this.getPionCollision( coordTemp, this.joueur ) instanceof Robot )
 		{
-			this.cristal = (Robot)this.getPionCollision( coordTemp, this.joueur ).getCristal();
+			this.cristal = ((Robot)this.getPionCollision( coordTemp, this.joueur )).getCristal();
 
-			(Robot)this.getPionCollision( coordTemp, this.joueur ).setCristal( null );
+			((Robot)this.getPionCollision( coordTemp, this.joueur )).setCristal( null );
 		}
 	}
 
@@ -210,6 +223,11 @@ public class Robot extends Pion
 
 	public String toString()
 	{
-		return "Robot "+"du joueur "+ this.joueur +" - coords " + this.x + ":" + this.y + ":" + this.z;
+		String s = "Robot du joueur "+ this.joueur.getNom() +" - coords ";
+		s += String.format("%2d", this.x) + ":";
+		s += String.format("%2d", this.y) + ":";
+		s += String.format("%2d", this.z);
+
+		return s;
 	}
 }

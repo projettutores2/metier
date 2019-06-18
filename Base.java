@@ -38,6 +38,12 @@ public class Base extends Pion
 
 	public String toString()
 	{
-		return "Base - coords " + this.x + ":" + this.y + ":" + this.z + "\n\tScore : " + this.getScore() + "\n\tJoueur : " + this.joueur.getNom();
+		String s = "Base - coords "; 
+		s += String.format("%2d", this.x) + ":";
+		s += String.format("%2d", this.y) + ":";
+		s += String.format("%2d", this.z);
+		s += "\n\tScore : " + this.getScore() + "\n\tJoueur : " + this.joueur.getNom();
+
+		return s;
 	}
 }
