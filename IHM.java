@@ -1,5 +1,6 @@
 package TwinTinBots.ihm;
-import TwinTinBots.metier.Metier;
+import TwinTinBots.metier.Joueur;
+import TwinTinBots.metier.Ordre;
 import iut.algo.*;
 
 public class IHM

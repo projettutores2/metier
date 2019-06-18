@@ -1,3 +1,4 @@
+package TwinTinBots.metier;
 public  class Ordre
 {
 	protected String txt ;

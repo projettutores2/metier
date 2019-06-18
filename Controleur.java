@@ -1,4 +1,6 @@
 package TwinTinBots.ihm;
+import TwinTinBots.metier.Metier;
+import TwinTinBots.metier.Joueur;
 public class Controleur
 {
 	private IHM ihm ;

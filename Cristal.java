@@ -3,7 +3,7 @@
   * @author : Equipe 14
   * @version 1
   */
-
+package TwinTinBots.metier;
 public class Cristal extends Pion
 {
 	private int valeur;

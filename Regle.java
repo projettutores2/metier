@@ -1,3 +1,4 @@
+package TwinTinBots.metier;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileReader;
@@ -28,7 +29,7 @@ public class Regle
 	{
 		try
 	    {
-	      Scanner sc = new Scanner (new FileReader ("map"+nbJoueur+".data"));
+	      Scanner sc = new Scanner (new FileReader ("TwinTinBots/map/map"+nbJoueur+".data"));
 	      String[] chaine ;
 	      int cpt ;
 
@@ -40,7 +41,7 @@ public class Regle
 	        	if(chaine[1].equals("nom") && chaine.length >=9)
 	        	{
 	        		//on cree un nouveau joueur et on l'ajoute
-	        		Joueur tmpJoueur = new Joueur (chaine[3],metier);
+	        		Joueur tmpJoueur = new Joueur (chaine[2],metier);
 	        		if(tmpJoueur!=null) joueurs.add(tmpJoueur);
 	        		//on cree c'est 2 robot
 	        		Robot tmpRobot1= new Robot(Integer.parseInt(chaine[4]),Integer.parseInt(chaine[5]),Integer.parseInt(chaine[6]),
@@ -55,7 +56,9 @@ public class Regle
 	        	}
 	        	if(chaine[1].equals("base") && chaine.length >=4)
 	        	{
-	        		Base tmpBase = new Base(Integer.parseInt(chaine[2]),Integer.parseInt(chaine[3]),Integer.parseInt(chaine[4]));
+	        		Base tmpBase = null;
+	        		Joueur baseJoueur = metier.getJoueurs(chaine[2]);
+	        		if(baseJoueur!= null)tmpBase = new Base(baseJoueur,Integer.parseInt(chaine[3]),Integer.parseInt(chaine[4]),Integer.parseInt(chaine[5]));
 	        		if(tmpBase!=null) pions.add(tmpBase);
 	        	}
 	        }
@@ -85,4 +88,5 @@ public class Regle
 	    }
 	    catch(Exception e) { e.printStackTrace(); }
 		}
+
 }

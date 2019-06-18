@@ -1,3 +1,4 @@
+package TwinTinBots.metier;
 /** Base
   * date : 17/08/2019
   * @author : Equipe 14

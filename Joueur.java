@@ -1,3 +1,4 @@
+package TwinTinBots.metier;
 import java.util.ArrayList;
 
 public class Joueur

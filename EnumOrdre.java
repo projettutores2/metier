@@ -1,3 +1,4 @@
+package TwinTinBots.metier;
 public enum EnumOrdre
 {
 	avancer        ("avancer"        ,2),
