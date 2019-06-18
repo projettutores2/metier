@@ -1,25 +1,36 @@
+/** Regle
+  * date : 17/08/2019
+  * @author : Equipe 14
+  * @version 1
+  */
+
 package TwinTinBots.metier;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.FileReader;
+
 public class Regle
 {
+	//regle de base du jeu 
 	private final static String[] NOM_ORDRE= {"avancer","avancerDouble","rotationDroite","rotationGauche","charger","decharger"};
 	private final static int CRISTAL_VERT = 2;
 	private final static int CRISTAL_BLEU = 3;
 
 	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,Metier metier)
 	{
+		//on scanne la map en fonction du nombre de joueur
 		Regle.scanner(joueurs,nbJoueur,pions,metier);
 		EnumOrdre enumTmp = null ;
 		Ordre tmp = null;
 		for(Joueur joueur : joueurs)
 		{
+			//on parcour le tableau d'ordre que l'on veux cree de l'enum
 			for(int j =0 ; j<Regle.NOM_ORDRE.length;j++)
 			{
 				enumTmp=EnumOrdre.valueOf(Regle.NOM_ORDRE[j]);
 				if(enumTmp != null)
 				{
+					//autan de fois que l'enum l'indique
 					for(int i = 0 ;i <enumTmp.getNombre();i++)
 					{
 					    tmp = enumTmp.creeOrdre();
@@ -34,6 +45,7 @@ public class Regle
 	{
 		try
 	    {
+	    	//on prend le fichier dans mmap en fonction des joueurs
 	      Scanner sc = new Scanner (new FileReader ("TwinTinBots/map/map"+nbJoueur+".data"));
 	      String[] chaine ;
 	      int cpt ;
@@ -41,6 +53,7 @@ public class Regle
 	      while ( sc.hasNextLine() )
 	      {
 	        chaine = sc.nextLine().split(":");
+	        //nom et robot du joueur
 	        if(chaine[0].equals("joueur"))
 	        {
 	        	if(chaine[1].equals("nom") && chaine.length >=9)
@@ -59,6 +72,7 @@ public class Regle
 	        		pions.add(tmpRobot1);
 	        		pions.add(tmpRobot2);
 	        	}
+	        	//enplacement et appartenance des base
 	        	if(chaine[1].equals("base") && chaine.length >=4)
 	        	{
 	        		Base tmpBase = null;
@@ -67,6 +81,7 @@ public class Regle
 	        		if(tmpBase!=null) pions.add(tmpBase);
 	        	}
 	        }
+	        //gere les position des cristal
 	    	if(chaine[0].equals("cristal"))
 	        {
 				if(chaine[1].equals("bleu"))
@@ -92,6 +107,6 @@ public class Regle
 	      sc.close();
 	    }
 	    catch(Exception e) { e.printStackTrace(); }
-	}
+		}
 
 }

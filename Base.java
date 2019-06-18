@@ -1,10 +1,9 @@
-package TwinTinBots.metier;
 /** Base
   * date : 17/08/2019
   * @author : Equipe 14
   * @version 1
   */
-
+package TwinTinBots.metier;
 import java.util.ArrayList;
 
 public class Base extends Pion
@@ -12,17 +11,18 @@ public class Base extends Pion
 	private ArrayList<Cristal> stockCristaux;
 	private Joueur joueur;
 
-	public Base( Joueur j, int x, int y, int z )
+	public Base( Joueur joueur, int x, int y, int z )
 	{
 		super( x, y, z );
 
-		this.joueur = j;
+		this.joueur = joueur;
 		this.stockCristaux = new ArrayList<Cristal>();
 	}
 
-	public void stocker( Cristal c )
+	public void stocker( Cristal cristal )
 	{
-		this.stockCristaux.add( c );
+		if(cristal != null)
+			this.stockCristaux.add( cristal );
 	}
 
 	public int getScore()
@@ -33,7 +33,6 @@ public class Base extends Pion
 		{
 			retour += c.getValeur();
 		}
-
 		return retour;
 	}
 

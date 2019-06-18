@@ -1,9 +1,9 @@
-package TwinTinBots.metier;
 /** Robot
   * date : 17/08/2019
   * @author : Equipe 14
   * @version 1
   */
+package TwinTinBots.metier;
 
 public class Robot extends Pion
 {
@@ -17,30 +17,22 @@ public class Robot extends Pion
 	/* CONSTRUCTEURS */
 	/*---------------*/
 
-	public Robot( int x, int y, int z, Joueur j, int dir )
+	public Robot( int x, int y, int z, Joueur joueur, int dir )
 	{
 		super( x, y, z );
 
-		this.joueur = j;
+		this.joueur = joueur;
 		this.direction = dir;
 
 		this.cristal = null;
 		this.algo = new Ordre[3];
 	}
 
-	public Robot( Joueur j )
-	{
-		this( 0, 0, 0, j, 0 );
-	}
-
-
-
 	/*---------------*/
 	/*    GETTERS    */
 	/*---------------*/
 
 	public Ordre[] getAlgo()         { return this.algo;    }
-	public Ordre   getOrdre( int i ) { return this.algo[i]; }
 	public Cristal getCristal()      { return this.cristal; }
 
 	public int[] getProchainesCoords()
@@ -58,6 +50,12 @@ public class Robot extends Pion
 
 		return coordTemp;
 	}
+	public Ordre   getOrdre( int indice ) 
+	{ 
+		if(indice < this.algo.length)
+			return this.algo[indice]; 
+		else return null;
+	}
 
 
 
@@ -65,7 +63,11 @@ public class Robot extends Pion
 	/*    SETTERS    */
 	/*---------------*/
 
-	public void setOrdre( int i, Ordre o ) { this.algo[i] = o; }
+	public void setOrdre( int indice, Ordre ordre ) 
+	{
+		if(indice < this.algo.length)
+			this.algo[indice] = ordre; 
+	}
 
 
 

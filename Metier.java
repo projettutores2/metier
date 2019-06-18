@@ -20,9 +20,9 @@ public class Metier
 		//a la charge de creer et donner les ordres
 		Regle.initialisation(this.joueurs,2,this.pions,this);
 
-		for(Pion pion : pions)
+		for(Joueur joueur : joueurs)
 		{
-			System.out.println(pion);
+			this.ctrl.afficherStockJoueur(joueur);
 		}
 	}
 

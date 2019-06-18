@@ -8,11 +8,10 @@ public class Cristal extends Pion
 {
 	private int valeur;
 
-	public Cristal( int x, int y, int z, int val )
+	public Cristal( int x, int y, int z, int valeur )
 	{
 		super( x, y, z );
-
-		this.valeur = val;
+		this.valeur = valeur;
 	}
 
 	public int getValeur() { return this.valeur; }

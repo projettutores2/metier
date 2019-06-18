@@ -1,9 +1,9 @@
-package TwinTinBots.metier;
 /** Pion
   * date : 17/08/2019
   * @author : Equipe 14
   * @version 1
   */
+package TwinTinBots.metier;
 
 public abstract class Pion
 {
@@ -40,7 +40,6 @@ public abstract class Pion
 				return p;
 			}
 		}
-
 		return null;
 	}
 

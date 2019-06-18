@@ -1,3 +1,9 @@
+/** EnumOrdre
+  * date : 17/08/2019
+  * @author : Equipe 14
+  * @version 1
+  */
+
 package TwinTinBots.metier;
 public enum EnumOrdre
 {
@@ -13,8 +19,8 @@ public enum EnumOrdre
 
 	private EnumOrdre(String nom,int nombre)
 	{
-		this.nom=nom;
-		this.nombre=nombre;
+		this.nom    = nom;
+		this.nombre = nombre;
 	}
 
 	public Ordre creeOrdre()

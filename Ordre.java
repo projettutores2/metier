@@ -10,7 +10,6 @@ public  class Ordre
 	public String toString() {return this.txt ;}
 }
 
-
 class Avancer extends Ordre
 {
 	int multiple ;
