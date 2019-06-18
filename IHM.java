@@ -54,6 +54,12 @@ public class IHM
 		return Clavier.lire_int()-1;
 	}
 
+	public int choisirRobot()
+	{
+		System.out.println("Choisir un robot");
+		return Clavier.lire_int()-1;
+	}
+
 	public void afficherStockJoueur(Joueur joueur)
 	{
 		int i = 0;

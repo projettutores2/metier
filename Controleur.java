@@ -29,6 +29,7 @@ public class Controleur
 	public void afficherStockJoueur(Joueur joueur) { this.ihm.afficherStockJoueur(joueur);       }
 	public int  demandeAction()                    { return this.ihm.demandeAction();            }
 	public int  choisirSlot()                      { return this.ihm.choisirSlot();              }
+	public int  choisirRobot()                     { return this.ihm.choisirRobot();             }
 	public int  choisirOrdreJoueur(Joueur joueur)  { return this.ihm.choisirOrdreJoueur(joueur); }
 	
 	//--------------------------------------------------------------
