@@ -73,12 +73,7 @@ public class Joueur
 	
 	public ArrayList<Ordre> getStockOrdres()
 	{
-		ArrayList<Ordre> tmp = new ArrayList<Ordre>();
-
-		for(Ordre ordre : this.stockOrdres)
-			tmp.add(ordre);
-
-		return tmp;
+		return this.stockOrdres;
 	}
 
 	public ArrayList<Pion> getListePions()
