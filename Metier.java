@@ -2,6 +2,8 @@ package TwinTinBots.metier;
 import TwinTinBots.ihm.Controleur;
 import java.util.ArrayList;
 import iut.algo.*;
+import java.util.Scanner;
+import java.io.FileReader;
 
 public class Metier
 {
@@ -28,37 +30,81 @@ public class Metier
 		boolean erreur;
 		for(Joueur joueur : this.joueurs)
 		{
-			//Choix du joueur pour la modification de son algorithme
-			this.ctrl.afficherAlgo(new Joueur(joueur));
-			
-			do
+			this.ctrl.afficherJeu();
+			if(! Controleur.DEBUG)
 			{
+				//Choix du joueur pour la modification de son algorithme
+				this.ctrl.afficherAlgo(new Joueur(joueur));
 				do
 				{
-					choix = this.ctrl.demandeAction();
+					do
+					{
+						choix = this.ctrl.demandeAction();
+					}
+					while(choix<1 || choix>5);
+				
+					switch (choix)
+					{
+						case 1: erreur=this.placerOrdre(joueur); break;
+						case 2: erreur=this.permuterOrdre(joueur); break;
+						case 3: erreur=this.retirerOrdre(joueur, -1); break;
+						case 4: erreur=this.redemarrerRobot(joueur); break;
+						default :
+							erreur = false;
+							break;
+					}
 				}
-				while(choix<1 || choix>5);
-			
-				switch (choix)
-				{
-					case 1: erreur=this.placerOrdre(joueur); break;
-					case 2: erreur=this.permuterOrdre(joueur); break;
-					case 3: erreur=this.retirerOrdre(joueur, -1); break;
-					case 4: erreur=this.redemarrerRobot(joueur); break;
-					default :
-						erreur = false;
-						break;
-				}
-			}
-			while(erreur);
+				while(erreur);
 
-			//Activation des algorithme
-			this.executionAlgo(joueur, 0);
-			this.executionAlgo(joueur, 1);		
+				//Activation des algorithme
+				this.executionAlgo(joueur, 0);
+				this.executionAlgo(joueur, 1);		
 
-			//Vérification de fin de partie
-			if(this.end) break;
+				//Vérification de fin de partie
+				if(this.end) break;
+			} else debugActif();
 		}
+	}
+	private void debugActif()
+	{
+	    try
+	    {
+		    String scenario = "1";
+			Scanner sc = new Scanner (new FileReader ("TwinTinBots/teste/teste"+scenario+".data"));
+		    String[] chaine ;
+		    String[] algo ;
+		    int cpt ;
+
+	      while ( sc.hasNextLine() )
+	      {
+	        chaine = sc.nextLine().split(":");
+	        algo = chaine[1].split("|");
+	        //nom et robot du joueur
+	        	Joueur joueur =  this.getJoueurs(chaine[0].substring(7));
+	        	for(int i = 0 ; i < algo.length ; i++)
+	        	{
+	        		int indiceRobot = i < 3 ? 0 : 1 ;
+	        		Ordre ordre = null;
+	        		switch(algo[i])
+	        		{
+	        			case "A1" : ordre = new Avancer(1);
+	        			case "A2" : ordre = new Avancer(2);
+	        			case "RD" : ordre = new Rotation('D');
+	        			case "RG" : ordre = new Rotation('G');
+	        			case "CH" : ordre = new Charger();
+	        			case "DE" : ordre = new Decharger();
+	        			case "--" : ordre = null;
+	        		}
+	        		joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
+	        	}
+	        	this.ctrl.afficherJeu();
+	        	this.executionAlgo(joueur, 0);
+				this.executionAlgo(joueur, 1);
+				this.ctrl.afficherJeu();
+	      }
+	      sc.close();
+	    }
+	   	 catch(Exception e) { e.printStackTrace(); }
 	}
 
 	private void executionAlgo(Joueur joueur, int idRobot)
@@ -69,7 +115,7 @@ public class Metier
 					try{Thread.sleep(500);}
 					catch(Exception e){}
 					ordre.action(joueur.getRobot(idRobot));
-					this.ctrl.afficherJeu();
+					//this.ctrl.afficherJeu();
 				}
 	}
 

@@ -1,0 +1,5 @@
+action vert:--|TG|--:--|--|A1
+action bleu:A2|--|--:--|TD|--
+action vert:--|TG|RC:--|A2|A1
+action bleu:--|TG|--:--|RC|--
+action vert:--|A2|DC:--|A2|A1
