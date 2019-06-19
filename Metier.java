@@ -70,7 +70,7 @@ public class Metier
 	    try
 	    {
 		    String scenario = "1";
-			Scanner sc = new Scanner (new FileReader ("TwinTinBots/test/teste"+scenario+".data"));
+			Scanner sc = new Scanner (new FileReader ("TwinTinBots/test/test"+scenario+".data"));
 		    String[] chaine ;
 		    String[] algo ;
 		    int cpt ;
