@@ -10,9 +10,9 @@ public class Controleur
 	private IHM ihm ;
 	private Metier metier;
 
-	public Controleur(String debug)
+	public Controleur(boolean debug)
 	{
-		if(debug.equals("debug")) DEBUG = true;
+		this.DEBUG = debug;
 		this.ihm    = new IHM(this) ;
 		this.metier = new Metier(this);
 		//boucle de jeu
@@ -25,7 +25,9 @@ public class Controleur
 
 	public static void main(String[] agrs)
 	{
-		new Controleur(agrs[1]);
+		boolean debug ;
+		debug = agrs.length > 0 && agrs[0].equals("debug");
+		new Controleur(debug);
 	}
 
 	//--------------------------------------------------------------
