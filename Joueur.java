@@ -9,14 +9,17 @@ import java.util.ArrayList;
 
 public class Joueur
 {
+	private static int       nbJoueurs;
 	private String           nom;
 	private Metier           metier;
 	private ArrayList<Ordre> stockOrdres;
 	private Robot[]          ensRobots;
 	private int              nbPoint;
+	private int              idJoueur;
 	
 	public Joueur(String nom,Metier metier)
 	{
+		this.idJoueur    = nbJoueurs++;
 		this.nom         = nom;
 		this.metier      = metier;
 		this.stockOrdres = new ArrayList<Ordre>();
@@ -64,11 +67,21 @@ public class Joueur
 	}
 	
 	//Get
+	public int getIdJoueur()
+	{
+		return this.idJoueur;
+	}
+	
 	public Robot getRobot(int indRobot)
 	{
 		if(indRobot < this.ensRobots.length)
 		     return this.ensRobots[indRobot];
 		else return null ;
+	}
+
+	public Robot[] getRobot()
+	{
+		return this.ensRobots;
 	}
 	
 	public ArrayList<Ordre> getStockOrdres()

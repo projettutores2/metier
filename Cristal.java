@@ -12,6 +12,7 @@ public class Cristal extends Pion
 	{
 		super( x, y, z );
 		this.valeur = valeur;
+		this.adresseImage = "cristal" + valeur + ".png";
 	}
 
 	public int getValeur() { return this.valeur; }

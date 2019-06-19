@@ -1,5 +1,6 @@
 package TwinTinBots.metier;
 import TwinTinBots.ihm.Controleur;
+import TwinTinBots.ihm.Launcher;
 import java.util.ArrayList;
 import iut.algo.*;
 import java.util.Scanner;
@@ -11,103 +12,109 @@ public class Metier
 	private boolean            end;
 	private ArrayList<Joueur>  joueurs ;
 	private ArrayList<Pion>    pions;
+	private int                indJoueurActif;
+	private int                nbTours;
 
-	public Metier(Controleur ctrl)
+	public Metier(Controleur ctrl, String[] tabNoms)
 	{
 		//init
 		this.ctrl=ctrl;
 		this.joueurs = new ArrayList<Joueur>();
 		this.pions   = new ArrayList<Pion>();
+		this.nbTours = 0;
 
 		//a la charge de creer et donner les ordres
 		Regle.initialisation(this.joueurs,2,this.pions,this);
+		for(int i = 0 ; i<tabNoms.length ; i++)
+			this.joueurs.get(i).setNom(tabNoms[i]);
 	}
 
+	
 	public void jouer()
 	{
 		int choix;
 		Ordre tmp;
 		boolean erreur;
-		if(! Controleur.DEBUG)
+		nbTours++;
+		for(Joueur joueur : this.joueurs)
 		{
-			for(Joueur joueur : this.joueurs)
+			this.indJoueurActif = this.joueurs.indexOf(joueur);
+			this.ctrl.afficherJeu();
+			if(! Controleur.DEBUG)
 			{
-				this.ctrl.afficherJeu();
-					//Choix du joueur pour la modification de son algorithme
-					this.ctrl.afficherAlgo(new Joueur(joueur));
+				//Choix du joueur pour la modification de son algorithme
+				this.ctrl.afficherAlgo(new Joueur(joueur));
+				do
+				{
 					do
 					{
-						do
-						{
-							choix = this.ctrl.demandeAction();
-						}
-						while(choix<1 || choix>5);
-					
-						switch (choix)
-						{
-							case 1: erreur=this.placerOrdre(joueur); break;
-							case 2: erreur=this.permuterOrdre(joueur); break;
-							case 3: erreur=this.retirerOrdre(joueur, -1); break;
-							case 4: erreur=this.redemarrerRobot(joueur); break;
-							default :
-								erreur = false;
-								break;
-						}
+						choix = this.ctrl.demandeAction();
 					}
-					while(erreur);
+					while(choix<1 || choix>5);
+				
+					switch (choix)
+					{
+						case 1: erreur=this.placerOrdre(joueur); break;
+						case 2: erreur=this.permuterOrdre(joueur); break;
+						case 3: erreur=this.retirerOrdre(joueur, -1); break;
+						case 4: erreur=this.redemarrerRobot(joueur); break;
+						default :
+							erreur = false;
+							break;
+					}
+				}
+				while(erreur);
 
-					//Activation des algorithme
-					this.executionAlgo(joueur, 0);
-					this.executionAlgo(joueur, 1);		
+				//Activation des algorithme
+				this.executionAlgo(joueur, 0);
+				this.executionAlgo(joueur, 1);		
 
-					//Vérification de fin de partie
-					if(this.end) break;
-			}
-		} else debugActif();
+				//Vérification de fin de partie
+				if(this.end) break;
+			} else debugActif();
+		}
 	}
+
 	private void debugActif()
 	{
 	    try
 	    {
 		    String scenario = "1";
-			Scanner sc = new Scanner (new FileReader ("TwinTinBots/test/test"+scenario+".data"));
+			Scanner sc = new Scanner (new FileReader ("TwinTinBots/teste/teste"+scenario+".data"));
 		    String[] chaine ;
 		    String[] algo ;
 		    int cpt ;
 
-	      while ( sc.hasNextLine() )
-	      {
-	        chaine = sc.nextLine().split(":");
-	        //nom et robot du joueur
-	        	Joueur joueur =  this.getJoueurs(chaine[0].substring(7));
-	        	this.ordreDebug(joueur,chaine[1].split("\\|"),0);
-	        	this.ordreDebug(joueur,chaine[2].split("\\|"),1);
-	      }
+	    	while ( sc.hasNextLine() )
+	    	{
+		        chaine = sc.nextLine().split(":");
+		        algo = chaine[1].split("|");
+		        //nom et robot du joueur
+				Joueur joueur =  this.getJoueurs(chaine[0].substring(7));
+				for(int i = 0 ; i < algo.length ; i++)
+				{
+					int indiceRobot = i < 3 ? 0 : 1 ;
+					Ordre ordre = null;
+					switch(algo[i])
+					{
+						case "A1" : ordre = new Avancer(1);          break;
+						case "A2" : ordre = new Avancer(2);          break;
+						case "RD" : ordre = new Rotation('D');       break;
+						case "RG" : ordre = new Rotation('G');       break;
+						case "CH" : ordre = new Charger();           break;
+						case "DE" : ordre = new Decharger();         break;
+						case "--" : ordre = null;                    break;
+					}
+					joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
+				}
+				this.ctrl.afficherJeu();
+				this.executionAlgo(joueur, 0);
+				this.executionAlgo(joueur, 1);
+				this.ctrl.afficherJeu();
+	    	}
 	      sc.close();
 	    }
 	   	 catch(Exception e) { e.printStackTrace(); }
-	   	 this.end=true;
-	}
-
-	private void ordreDebug(Joueur joueur,String[] algo,int indiceRobot)
-	{
-	    for(int i = 0 ; i < algo.length ; i++)
-    	{
-    		Ordre ordre = null;
-    		switch(algo[i])
-    		{
-    			case "A1" : ordre = new Avancer(1);    break ;
-    			case "A2" : ordre = new Avancer(2);    break ;
-    			case "RD" : ordre = new Rotation('D'); break ;
-    			case "RG" : ordre = new Rotation('G'); break ;
-    			case "CH" : ordre = new Charger();     break ;
-    			case "DE" : ordre = new Decharger();   break ;
-    			case "--" : ordre = null;              break ;
-    		}
-    		joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
-    	}
-    	this.ctrl.afficherJeu();
-    	this.executionAlgo(joueur, indiceRobot);
 	}
 
 	private void executionAlgo(Joueur joueur, int idRobot)
@@ -120,7 +127,6 @@ public class Metier
 					ordre.action(joueur.getRobot(idRobot));
 					//this.ctrl.afficherJeu();
 				}
-				this.ctrl.afficherJeu();
 	}
 
 	private boolean placerOrdre(Joueur joueur)
@@ -201,9 +207,33 @@ public class Metier
 		return null ;
 	}
 
+	public Robot[] getRobotsCourants()
+	{
+		return this.joueurs.get(this.indJoueurActif).getRobot();
+	}
+
 	public int getNbJoueurs()
 	{
 		return this.joueurs.size();
+	}
+
+	public int getNombreTour()
+	{
+		return this.nbTours;
+	}
+
+	public String getJoueurActif()
+	{
+		return this.joueurs.get(this.indJoueurActif).getNom();
+	}
+
+	public int getScoreJoueurActif()
+	{
+		for(Pion pion : this.pions)
+			if(pion instanceof Base)
+				if(((Base)pion).getJoueur()==this.joueurs.get(indJoueurActif))
+					return ((Base)pion).getScore();
+		return -1;
 	}
 
 	public boolean getEnd() {return this.end ;}

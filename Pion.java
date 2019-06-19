@@ -12,11 +12,18 @@ public abstract class Pion
 	protected int y;
 	protected int z;
 
+	protected int xAxial;
+	protected int yAxial;
+
+	protected String adresseImage;
+
 	public Pion( int x, int y, int z )
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		this.transformerCoordonnees();
+
 	}
 
 	public int[] getCoords()
@@ -31,6 +38,11 @@ public abstract class Pion
 			     setCoord[2] == p.z    );
 	}
 
+	public int getXAxial() { return this.xAxial; }
+	public int getYAxial() { return this.yAxial; }
+
+	public String getAdresseImage() { return this.adresseImage; }
+
 	public Pion getPionCollision( int[] setCoord, Joueur joueur )
 	{
 		for ( Pion pion : joueur.getListePions() )
@@ -43,11 +55,19 @@ public abstract class Pion
 		return null;
 	}
 
+	public void transformerCoordonnees()
+	{
+		this.xAxial = ((int)((this.x-this.y)*Math.sin(Math.PI*60/180)/(38 + 366)));
+		this.yAxial = ((this.z * 38 * 3 + 500)/2);
+	}
+
 	public void setPos( int x, int y, int z )
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
+
+		this.transformerCoordonnees();
 	}
 
 	public String toString()

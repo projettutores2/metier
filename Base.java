@@ -17,6 +17,7 @@ public class Base extends Pion
 
 		this.joueur = joueur;
 		this.stockCristaux = new ArrayList<Cristal>();
+		this.adresseImage = "base" + this.joueur.getIdJoueur() + ".png";
 	}
 
 	public void stocker( Cristal cristal )
@@ -34,6 +35,11 @@ public class Base extends Pion
 			retour += c.getValeur();
 		}
 		return retour;
+	}
+
+	public Joueur getJoueur()
+	{
+		return this.joueur;
 	}
 
 	public String toString()
