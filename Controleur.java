@@ -5,11 +5,14 @@ import TwinTinBots.metier.Pion;
 import java.util.ArrayList;
 public class Controleur
 {
+	public static boolean DEBUG ;
+
 	private IHM ihm ;
 	private Metier metier;
 
-	public Controleur()
+	public Controleur(String debug)
 	{
+		if(debug.equals("debug")) DEBUG = true;
 		this.ihm    = new IHM(this) ;
 		this.metier = new Metier(this);
 		//boucle de jeu
@@ -22,7 +25,7 @@ public class Controleur
 
 	public static void main(String[] agrs)
 	{
-		new Controleur();
+		new Controleur(agrs[1]);
 	}
 
 	//--------------------------------------------------------------
