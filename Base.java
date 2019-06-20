@@ -41,6 +41,15 @@ public class Base extends Pion
 	{
 		return this.joueur;
 	}
+	public int getNbCristal(int valeur)
+	{
+		int nb = 0 ;
+		for(Cristal cristal : this.stockCristaux)
+		{
+			if(cristal.getValeur() == valeur) nb++ ;
+		}
+		return nb ;
+	}
 
 	public String toString()
 	{
