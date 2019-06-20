@@ -16,9 +16,8 @@ public class Controleur
 
 	public Controleur(String[] tabNoms)
 	{
-		/*if(debug.equals("debug"))*/ DEBUG = false;
+		if(tabNoms.length == 1 ) DEBUG =true;
 		this.metier = new Metier(this, tabNoms);
-		
 		this.ihm    = new FenPrincipale(this);
 
 		//boucle de jeu
