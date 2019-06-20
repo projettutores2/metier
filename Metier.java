@@ -27,6 +27,7 @@ public class Metier
 		Regle.initialisation(this.joueurs,2,this.pions,this);
 		for(int i = 0 ; i<tabNoms.length ; i++)
 			this.joueurs.get(i).setNom(tabNoms[i]);
+		this.victoire = new Victoire(pions,joueurs.size(),this);
 	}
 
 	
@@ -71,6 +72,7 @@ public class Metier
 				this.executionAlgo(joueur, 1);		
 
 				//Vérification de fin de partie
+				this.victoire.estFinie();
 				if(this.end) break;
 			} else debugActif();
 		}
