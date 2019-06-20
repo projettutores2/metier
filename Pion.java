@@ -23,6 +23,7 @@ public abstract class Pion
 		this.y = y;
 		this.z = z;
 		this.transformerCoordonnees();
+
 	}
 
 	public int[] getCoords()
@@ -53,6 +54,8 @@ public abstract class Pion
 		}
 		return null;
 	}
+
+	public double getDoubleDirection() { return Math.PI/3; }
 
 	public void transformerCoordonnees()
 	{

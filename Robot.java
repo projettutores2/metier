@@ -27,7 +27,8 @@ public class Robot extends Pion
 
 		this.cristal = null;
 		this.algo = new Ordre[3];
-		this.adresseImage = "TwinTinBots/img/"+ type + "Robot" + this.joueur.getIdJoueur() + ".png";
+
+		this.adresseImage = "./TwinTinBots/img/"+ type + "Robot" + this.joueur.getIdJoueur() + ".png";
 	}
 
 	/*---------------*/
@@ -67,7 +68,12 @@ public class Robot extends Pion
 		else return null;
 	}
 
+	public Joueur getJoueur()
+	{
+		return new Joueur(this.joueur);
+	}
 
+	public double getDoubleDirection() { return super.getDoubleDirection()*this.direction; }
 
 	/*---------------*/
 	/*    SETTERS    */
@@ -110,13 +116,13 @@ public class Robot extends Pion
 				//Si oui, le pion à pousser est poussé et on déplace notre
 				//robot aux anciennes coordonnées du pion
 				Pion pionTmp2 = this.getPionCollision( coordTemp, this.joueur );
-				if ( pionTmp2 != null )
+				if ( pionTmp2 == null )
 				{
 					if ( !horsDeLaMap( tailleMap, coordTemp ) )
 					{
 						int[] coordTemp2 = this.getProchainesCoords(null);
 
-						pionTmp2.setPos( coordTemp[0], coordTemp[1], coordTemp[2] );
+						pionTmp.setPos( coordTemp[0], coordTemp[1], coordTemp[2] );
 					}
 
 					//Déplacement du robot
@@ -126,6 +132,8 @@ public class Robot extends Pion
 						this.x = coordTemp[0];
 						this.y = coordTemp[1];
 						this.z = coordTemp[2];
+
+						this.transformerCoordonnees();
 					}
 				}
 			}
@@ -137,6 +145,7 @@ public class Robot extends Pion
 				this.x = coordTemp[0];
 				this.y = coordTemp[1];
 				this.z = coordTemp[2];
+				this.transformerCoordonnees();
 			}
 		}
 	}
@@ -153,7 +162,7 @@ public class Robot extends Pion
 		switch ( sens )
 		{
 			case 'D':this.direction++; break;
-			case 'G':this.direction--; break;
+			case 'G':this.direction+=5; break;
 		}
 
 		this.direction %= 6;
@@ -214,6 +223,11 @@ public class Robot extends Pion
 				this.cristal = null;
 			}
 		}
+	}
+
+	public boolean equals(Robot robot)
+	{
+		return this.x == robot.x && this.y == robot.y && this.z == robot.z;
 	}
 
 	public String toString()
