@@ -42,8 +42,7 @@ public class Metier
 		}
 		else
 		{
-			Scanner sc = new Scanner(System.in);
-			this.scenario = sc.nextLine();
+			this.scenario = tabNoms[0];
 			Regle.initialisation(this.joueurs,6,this.pions,this,scenario);
 		}
 	}

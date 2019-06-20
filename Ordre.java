@@ -20,7 +20,7 @@ public  class Ordre
 
 	public void action(Robot robot){}
 	public String toString() { return this.txt ;}
-	public JLabel getImg()   { return this.image; }
+	public JLabel getImg()   { return new JLabel(this.image.getIcon()); }
 }
 
 class Avancer extends Ordre
@@ -35,7 +35,7 @@ class Avancer extends Ordre
 
 	public Avancer(int multiple)
 	{
-		this(multiple, "");
+		this(multiple, "./TwinTinBots/img/imgOrdre" + multiple + ".png");
 	}
 	
 	public void action(Robot robot)
@@ -56,7 +56,7 @@ class Rotation extends Ordre
 	}
 	public Rotation(char sens)
 	{
-		this(sens, "");
+		this(sens, "./TwinTinBots/img/imgOrdre" + (sens=='G'?2:3) + ".png");
 	}
 	
 	public void action(Robot robot)
@@ -74,7 +74,7 @@ class Charger extends Ordre
 
 	public Charger()
 	{
-		this("");
+		this("./TwinTinBots/img/imgOrdre4.png");
 	}
 	
 	public void action(Robot robot)
@@ -91,7 +91,7 @@ class Decharger extends Ordre
 
 	public Decharger()
 	{
-		this("");
+		this("./TwinTinBots/img/imgOrdre5.png");
 	}
 	
 	public void action(Robot robot)

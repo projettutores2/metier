@@ -32,7 +32,7 @@ public class Joueur
 		this.nom         = joueur.nom;
 		this.metier      = joueur.metier;
 		this.stockOrdres = this.copyStock(joueur.getStockOrdres());
-		this.ensRobots   = new Robot[]{new Robot(joueur.getRobot(0)), new Robot(joueur.getRobot(1))};
+		this.ensRobots   = joueur.ensRobots;
 		this.nbPoint     = joueur.nbPoint;
 	}
 
@@ -86,16 +86,6 @@ public class Joueur
 		     return this.ensRobots[indRobot];
 		else return null ;
 	}
-	public int getScoreRobots()
-	{
-		int score =0;
-		for(int i = 0 ; i < 2 ; i++)
-		{
-			Cristal cristal = this.getRobot(i).getCristal();
-			if(cristal != null )score += cristal.getValeur()-1;
-		}
-		return score ;
-	}
 
 	public Robot[] getRobot()
 	{
@@ -117,15 +107,15 @@ public class Joueur
 	public String getNom(){return this.nom;}
 
 	public int getScoreRobots()
-    {
-        int score =0;
-        for(int i = 0 ; i < 2 ; i++)
-        {
-            Robot robot = this.getRobot(i).getCristal()
-            if(robot != null )score += robot.getValeur()-1;
-        }
-        return score ;
-    }
+	{
+		int score =0;
+		for(int i = 0 ; i < 2 ; i++)
+		{
+			Cristal cristal = this.getRobot(i).getCristal();
+			if(cristal != null )score += cristal.getValeur()-1;
+		}
+		return score ;
+}
 
 	public boolean equals(Joueur joueur)
 	{

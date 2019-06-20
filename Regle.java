@@ -13,13 +13,13 @@ public class Regle
 {
 	//regle de base du jeu 
 	private final static String[] NOM_ORDRE= {"avancer","avancerDouble","rotationDroite","rotationGauche","charger","decharger"};
-	private final static int CRISTAL_VERT = 2;
-	private final static int CRISTAL_BLEU = 3;
+	private final static int CRISTAL_VERT = 3;
+	private final static int CRISTAL_BLEU = 2;
 
-	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,Metier metier)
+	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,Metier metier,String scenario)
 	{
 		//on scanne la map en fonction du nombre de joueur
-		Regle.scanner(joueurs,nbJoueur,pions,metier);
+		Regle.scanner(joueurs,nbJoueur,pions,metier,scenario);
 		EnumOrdre enumTmp = null ;
 		Ordre tmp = null;
 		for(Joueur joueur : joueurs)
@@ -41,12 +41,14 @@ public class Regle
 		}
 	}
 
-	private static void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,Metier metier)
+	private static void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,Metier metier,String scenario)
 	{
 		try
 	    {
 	    	//on prend le fichier dans mmap en fonction des joueurs
-	      Scanner sc = new Scanner (new FileReader ("TwinTinBots/map/map"+nbJoueur+".data"));
+	    	Scanner sc ;
+	      if(scenario.equals("")) sc = new Scanner (new FileReader ("TwinTinBots/map/map"+nbJoueur+".data"));
+	      else  sc = new Scanner (new FileReader ("TwinTinBots/test/map_test/map_"+scenario+".data"));
 	      String[] chaine ;
 	      int cpt ;
 
@@ -63,9 +65,9 @@ public class Regle
 	        		if(tmpJoueur!=null) joueurs.add(tmpJoueur);
 	        		//on cree c'est 2 robot
 	        		Robot tmpRobot1= new Robot(Integer.parseInt(chaine[4]),Integer.parseInt(chaine[5]),Integer.parseInt(chaine[6]),
-	        			tmpJoueur,Integer.parseInt(chaine[3]));
+	        			tmpJoueur,Integer.parseInt(chaine[3]), "gros");
 	        		Robot tmpRobot2= new Robot(Integer.parseInt(chaine[8]),Integer.parseInt(chaine[9]),Integer.parseInt(chaine[10]),
-	        			tmpJoueur,Integer.parseInt(chaine[7]));
+	        			tmpJoueur,Integer.parseInt(chaine[7]), "petit");
 	        		//on ajoute les robot au joueur
 	        		tmpJoueur.creeRobot(tmpRobot1,tmpRobot2);
 	        		//on ajoute les 2 rebot du joueur au pion
