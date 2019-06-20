@@ -1,28 +1,41 @@
 package TwinTinBots.metier;
+import javax.swing.*;
+
 public  class Ordre
 {
 	protected String txt ;
-	protected String imgOrdre;
+	protected JLabel image;
 
-	public Ordre(String txt, String imgOrdre)
+	public Ordre(String txt, String adresseImg)
 	{
-		this.txt=txt;
-		this.imgOrdre = imgOrdre;
+		this.txt = txt;
+		if(!adresseImg.equals(""))
+			this.image = new JLabel(new ImageIcon(adresseImg));
 	}
+
+	public Ordre(String txt)
+	{
+		this(txt, "");
+	}
+
 	public void action(Robot robot){}
-	public String getImgOrdre() {return this.imgOrdre; }
-	public String toString() {return this.txt ;}
+	public String toString() { return this.txt ;}
+	public JLabel getImg()   { return this.image; }
 }
 
 class Avancer extends Ordre
 {
 	int multiple ;
 
+	public Avancer(int multiple, String adresseImg)
+	{
+		super("Avancer"+(multiple == 1 ? " simple":" double"), adresseImg);
+		this.multiple = multiple;
+	}
+
 	public Avancer(int multiple)
 	{
-		super("Avancer"  + (multiple == 1 ? " simple":" double"),
-			  "imgOrdre" + (multiple == 1 ? "0":"1") + ".png"  );
-		this.multiple=multiple;
+		this(multiple, "");
 	}
 	
 	public void action(Robot robot)
@@ -35,11 +48,15 @@ class Avancer extends Ordre
 class Rotation extends Ordre
 {
 	char sens ;
+
+	public Rotation(char sens, String adresseImg)
+	{
+		super("Rotation"+(sens == 'D' ? " droite":" gauche"), adresseImg);
+		this.sens = sens;
+	}
 	public Rotation(char sens)
 	{
-		super("Rotation" + (sens == 'D' ? " droite":" gauche"),
-			  "imgOrdre" + (sens == 'D' ? "3" : "2") + ".png");
-		this.sens=sens;
+		this(sens, "");
 	}
 	
 	public void action(Robot robot)
@@ -50,10 +67,14 @@ class Rotation extends Ordre
 
 class Charger extends Ordre
 {
+	public Charger(String adresseImg)
+	{
+		super("Charger", adresseImg);
+	}
 
 	public Charger()
 	{
-		super("Charger", "imgOrdre4.png");
+		this("");
 	}
 	
 	public void action(Robot robot)
@@ -63,9 +84,14 @@ class Charger extends Ordre
 }
 class Decharger extends Ordre
 {
+	public Decharger(String adresseImg)
+	{
+		super("Decharger", adresseImg);
+	}
+
 	public Decharger()
 	{
-		super("Decharger", "imgOrdre5.png");
+		this("");
 	}
 	
 	public void action(Robot robot)
