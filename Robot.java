@@ -62,7 +62,7 @@ public class Robot extends Pion
 		return coordTemp;
 	}
 	public Ordre   getOrdre( int indice ) 
-	{ 
+	{
 		if(indice < this.algo.length)
 			return this.algo[indice]; 
 		else return null;

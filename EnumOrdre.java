@@ -36,7 +36,7 @@ public enum EnumOrdre
 				break;
 			case "rotationDroite" : tmp = new Rotation('D', this.adresseImg);
 				break;
-			case "rotationGauche" : tmp = new Rotation('G', this.adresseImg);  
+			case "rotationGauche" : tmp = new Rotation('G', this.adresseImg);
 				break;
 			case "charger"        : tmp = new Charger(this.adresseImg);
 				break;

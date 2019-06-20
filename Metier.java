@@ -104,28 +104,28 @@ public class Metier
 
 	private void debugActif(String scenario)
 	{
-	    try
-	    {
+		try
+		{
 			Scanner sc = new Scanner (new FileReader ("TwinTinBots/test/test_"+scenario+".data"));
-		    String[] chaine ;
-		    String[] algo ;
-		    int cpt ;
+			String[] chaine ;
+			String[] algo ;
+			int cpt ;
 
-	    	while ( sc.hasNextLine() )
-	    	{
-		        chaine = sc.nextLine().split(":");
-		        algo = chaine[1].split("|");
-		        //nom et robot du joueur
+			while ( sc.hasNextLine() )
+			{
+				chaine = sc.nextLine().split(":");
+				algo = chaine[1].split("|");
+				//nom et robot du joueur
 				Joueur joueur =  this.getJoueurs(chaine[0].substring(7));
 				System.out.println(joueur);
 				this.ordreDebug(joueur,chaine[1].split("\\|"),0);
-	        	this.ordreDebug(joueur,chaine[2].split("\\|"),1);
-	        	this.ctrl.afficherJeu();
-	    	}
-	      sc.close();
-	    }
-	   	 catch(Exception e) { e.printStackTrace(); }
-	   	 this.end=true;
+				this.ordreDebug(joueur,chaine[2].split("\\|"),1);
+				this.ctrl.afficherJeu();
+			}
+		  sc.close();
+		}
+		 catch(Exception e) { e.printStackTrace(); }
+		 this.end=true;
 	}
 
 	private void executionAlgo(Joueur joueur, int idRobot)
@@ -136,7 +136,7 @@ public class Metier
 					try{Thread.sleep(500);}
 					catch(Exception e){}
 					ordre.action(joueur.getRobot(idRobot));
-					//this.ctrl.afficherJeu();
+					this.ctrl.afficherJeu();
 				}
 	}
 
@@ -207,27 +207,27 @@ public class Metier
 
 	private void ordreDebug(Joueur joueur,String[] algo,int indiceRobot)
 	{
-	    for(int i = 0 ; i < algo.length ; i++)
-    	{
-    		Ordre ordre = null;
-    		this.indJoueurActif = this.joueurs.indexOf(joueur);
+		for(int i = 0 ; i < algo.length ; i++)
+		{
+			Ordre ordre = null;
+			this.indJoueurActif = this.joueurs.indexOf(joueur);
 			this.ctrl.afficherJeu();
-    		switch(algo[i])
-    		{
-    			case "A1" : ordre = new Avancer(1);    break ;
-    			case "A2" : ordre = new Avancer(2);    break ;
-    			case "RD" : ordre = new Rotation('D'); break ;
-    			case "RG" : ordre = new Rotation('G'); break ;
-    			case "CH" : ordre = new Charger();     break ;
-    			case "DE" : ordre = new Decharger();   break ;
-    			case "--" : ordre = null;              break ;
-    		}
-    		joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
-    		this.ctrl.afficherJeu();
-    		System.out.println(joueur.getRobot(indiceRobot));
-    	}
-    	this.ctrl.afficherJeu();
-    	this.executionAlgo(joueur, indiceRobot);
+			switch(algo[i])
+			{
+				case "A1" : ordre = new Avancer(1);    break ;
+				case "A2" : ordre = new Avancer(2);    break ;
+				case "RD" : ordre = new Rotation('D'); break ;
+				case "RG" : ordre = new Rotation('G'); break ;
+				case "CH" : ordre = new Charger();     break ;
+				case "DE" : ordre = new Decharger();   break ;
+				case "--" : ordre = null;              break ;
+			}
+			joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
+			this.ctrl.afficherJeu();
+			System.out.println(joueur.getRobot(indiceRobot));
+		}
+		this.ctrl.afficherJeu();
+		this.executionAlgo(joueur, indiceRobot);
 	}
 
 	//--------------------------------------------------------------
