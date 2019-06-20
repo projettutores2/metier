@@ -14,6 +14,8 @@ public class Metier
 	private ArrayList<Pion>    pions;
 	private int                indJoueurActif;
 	private int                nbTours;
+	private ModifAlgo          modifAlgo;
+	private String             scenario;
 
 	public Metier(Controleur ctrl, String[] tabNoms)
 	{
@@ -22,64 +24,90 @@ public class Metier
 		this.joueurs = new ArrayList<Joueur>();
 		this.pions   = new ArrayList<Pion>();
 		this.nbTours = 0;
+		this.end = false;
 
 		//a la charge de creer et donner les ordres
-		Regle.initialisation(this.joueurs,2,this.pions,this);
-		for(int i = 0 ; i<tabNoms.length ; i++)
-			this.joueurs.get(i).setNom(tabNoms[i]);
+		if(! Controleur.DEBUG)
+		{
+			Regle.initialisation(this.joueurs,tabNoms.length,this.pions,this,"");
+			System.out.println(tabNoms.length);
+			for(int i = 0 ; i<tabNoms.length ; i++)
+				this.joueurs.get(i).setNom(tabNoms[i]);
+			//teste
+			for(Joueur joueur : this.joueurs)
+			{
+				joueur.getRobot(0).setOrdre(0,new Avancer(1,"./TwinTinBots/img/imgOrdre0.png"));
+				joueur.getRobot(1).setOrdre(0,new Avancer(1,"./TwinTinBots/img/imgOrdre0.png"));
+			}
+		}
+		else
+		{
+			Scanner sc = new Scanner(System.in);
+			this.scenario = sc.nextLine();
+			Regle.initialisation(this.joueurs,6,this.pions,this,scenario);
+		}
 	}
 
 	
 	public void jouer()
 	{
-		ModifAlgo modifAlgo;
 		Ordre tmp;
 		boolean erreur;
 		nbTours++;
+		if(Controleur.DEBUG)
+		{
+			this.debugActif(scenario);
+		}
 		for(Joueur joueur : this.joueurs)
 		{
+			System.out.println(joueur.getNom());
+			this.modifAlgo = new ModifAlgo();
 			this.indJoueurActif = this.joueurs.indexOf(joueur);
 			this.ctrl.afficherJeu();
-			if(! Controleur.DEBUG)
+			do
 			{
 				do
 				{
-					do
-					{
-						modifAlgo = this.getActualModif(this.ctrl.demandeModif());
-					}
-					while(modifAlgo.getType()<1 || modifAlgo.getType()>5);
-				
-					switch (modifAlgo.getType())
-					{
-						case 1: erreur=this.placerOrdre(modifAlgo); break;
-						case 2: erreur=this.permuterOrdre(modifAlgo); break;
-						case 3: erreur=this.retirerOrdre(modifAlgo, -1); break;
-						case 4: erreur=this.redemarrerRobot(modifAlgo); break;
-						default :
-							erreur = false;
-							break;
-					}
+					System.out.print("");
 				}
-				while(erreur);
+				while(!this.modifAlgo.getReady());
 
-				//Activation des algorithme
+				System.out.println(this.modifAlgo.getJoueur());
+				System.out.println(this.modifAlgo.getRobot());
+				System.out.println(this.modifAlgo.getType());
+				switch (this.modifAlgo.getType())
+				{
+					case 1: erreur=this.placerOrdre(this.modifAlgo); break;
+					case 2: erreur=this.permuterOrdre(this.modifAlgo); break;
+					case 3: erreur=this.retirerOrdre(this.modifAlgo, -1); break;
+					case 4: erreur=this.redemarrerRobot(this.modifAlgo); break;
+					default :
+						erreur = false;
+						break;
+				}
+			}
+			while(erreur);
 
-				this.executionAlgo(joueur, 0);
-				this.executionAlgo(joueur, 1);		
+			//Activation des algorithme
 
-				//Vérification de fin de partie
-				if(this.end) break;
-			} else debugActif();
+			this.ctrl.afficherJeu();
+			this.executionAlgo(joueur, 0);
+			this.ctrl.afficherJeu();
+			this.executionAlgo(joueur, 1);
+			this.ctrl.afficherJeu();
+			for(Pion pion : pions)
+				System.out.println(pion);
+
+			//Vérification de fin de partie
+			if(this.end) break;
 		}
 	}
 
-	private void debugActif()
+	private void debugActif(String scenario)
 	{
 	    try
 	    {
-		    String scenario = "1";
-			Scanner sc = new Scanner (new FileReader ("TwinTinBots/teste/teste"+scenario+".data"));
+			Scanner sc = new Scanner (new FileReader ("TwinTinBots/test/test_"+scenario+".data"));
 		    String[] chaine ;
 		    String[] algo ;
 		    int cpt ;
@@ -90,30 +118,15 @@ public class Metier
 		        algo = chaine[1].split("|");
 		        //nom et robot du joueur
 				Joueur joueur =  this.getJoueurs(chaine[0].substring(7));
-				for(int i = 0 ; i < algo.length ; i++)
-				{
-					int indiceRobot = i < 3 ? 0 : 1 ;
-					Ordre ordre = null;
-					switch(algo[i])
-					{
-						case "A1" : ordre = new Avancer(1);          break;
-						case "A2" : ordre = new Avancer(2);          break;
-						case "RD" : ordre = new Rotation('D');       break;
-						case "RG" : ordre = new Rotation('G');       break;
-						case "CH" : ordre = new Charger();           break;
-						case "DE" : ordre = new Decharger();         break;
-						case "--" : ordre = null;                    break;
-					}
-					joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
-				}
-				this.ctrl.afficherJeu();
-				this.executionAlgo(joueur, 0);
-				this.executionAlgo(joueur, 1);
-				this.ctrl.afficherJeu();
+				System.out.println(joueur);
+				this.ordreDebug(joueur,chaine[1].split("\\|"),0);
+	        	this.ordreDebug(joueur,chaine[2].split("\\|"),1);
+	        	this.ctrl.afficherJeu();
 	    	}
 	      sc.close();
 	    }
 	   	 catch(Exception e) { e.printStackTrace(); }
+	   	 this.end=true;
 	}
 
 	private void executionAlgo(Joueur joueur, int idRobot)
@@ -155,6 +168,7 @@ public class Metier
 
 		slot1 = modifAlgo.getSlot();
 		slot2 = modifAlgo.getSlot2();
+		System.out.println(slot1 + " " + slot2);
 	
 		if(slot1<0 || slot1 >5 ||
 		   slot2<0 || slot2 >5 ||
@@ -164,6 +178,7 @@ public class Metier
 		Robot  robot  = modifAlgo.getRobot();
 
 		Ordre tmp = robot.getOrdre(slot1);
+		System.out.println(tmp);
 		robot.setOrdre(slot1, robot.getOrdre(slot2));
 		robot.setOrdre(slot2, tmp);
 		return false;
@@ -191,6 +206,30 @@ public class Metier
 		return false;
 	}
 
+	private void ordreDebug(Joueur joueur,String[] algo,int indiceRobot)
+	{
+	    for(int i = 0 ; i < algo.length ; i++)
+    	{
+    		Ordre ordre = null;
+    		this.indJoueurActif = this.joueurs.indexOf(joueur);
+			this.ctrl.afficherJeu();
+    		switch(algo[i])
+    		{
+    			case "A1" : ordre = new Avancer(1);    break ;
+    			case "A2" : ordre = new Avancer(2);    break ;
+    			case "RD" : ordre = new Rotation('D'); break ;
+    			case "RG" : ordre = new Rotation('G'); break ;
+    			case "CH" : ordre = new Charger();     break ;
+    			case "DE" : ordre = new Decharger();   break ;
+    			case "--" : ordre = null;              break ;
+    		}
+    		joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
+    		this.ctrl.afficherJeu();
+    		System.out.println(joueur.getRobot(indiceRobot));
+    	}
+    	this.ctrl.afficherJeu();
+    	this.executionAlgo(joueur, indiceRobot);
+	}
 
 	//--------------------------------------------------------------
 	//                             GET
@@ -202,6 +241,14 @@ public class Metier
 				return joueur;
 		}
 		return null ;
+	}
+
+	public ArrayList<Joueur> getListJoueur()
+	{
+		ArrayList<Joueur> tmp = new ArrayList<Joueur>();
+		for(Joueur joueur : this.joueurs)
+			tmp.add(new Joueur(joueur));
+		return tmp;
 	}
 
 	public Robot[] getRobotsCourants()
@@ -238,6 +285,11 @@ public class Metier
 	public ArrayList<Pion> getListePions()
 	{
 		return this.pions;
+	}
+
+	public ModifAlgo getModifAlgo()
+	{
+		return this.modifAlgo;
 	}
 
 	public ModifAlgo getActualModif(ModifAlgo modifAlgo)
