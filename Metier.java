@@ -27,7 +27,6 @@ public class Metier
 		Regle.initialisation(this.joueurs,2,this.pions,this);
 		for(int i = 0 ; i<tabNoms.length ; i++)
 			this.joueurs.get(i).setNom(tabNoms[i]);
-		this.victoire = new Victoire(pions,joueurs.size(),this);
 	}
 
 	
@@ -43,8 +42,6 @@ public class Metier
 			this.ctrl.afficherJeu();
 			if(! Controleur.DEBUG)
 			{
-				//Choix du joueur pour la modification de son algorithme
-				this.ctrl.afficherAlgo(new Joueur(joueur));
 				do
 				{
 					do
@@ -72,7 +69,6 @@ public class Metier
 				this.executionAlgo(joueur, 1);		
 
 				//Vérification de fin de partie
-				this.victoire.estFinie();
 				if(this.end) break;
 			} else debugActif();
 		}
@@ -223,9 +219,9 @@ public class Metier
 		return this.nbTours;
 	}
 
-	public String getJoueurActif()
+	public Joueur getJoueurActif()
 	{
-		return this.joueurs.get(this.indJoueurActif).getNom();
+		return new Joueur(this.joueurs.get(this.indJoueurActif));
 	}
 
 	public int getScoreJoueurActif()
@@ -246,17 +242,24 @@ public class Metier
 
 	public ModifAlgo getActualModif(ModifAlgo modifAlgo)
 	{
-		Joueur joueur;
-		Robot  robot;
+		Joueur joueur = null;
+		Robot  robot  = null;
 		for(Joueur actJoueur : this.joueurs)
 		{
 			if(modifAlgo.getJoueur().equals(actJoueur))
 			{
 				joueur = actJoueur;
-				joueur.getRobot(0).equals(modifAlgo.getRobot()) ? robot = joueur.getRobot(0) : robot = joueur.getRobot(1);
+				if (joueur.getRobot(0).equals(modifAlgo.getRobot()))
+					robot = joueur.getRobot(0);
+				else
+					robot = joueur.getRobot(1);
 			}
 		}
-		actModifAlgo = new ModifAlgo(joueur, robot, modifAlgo.slot(), modifAlgo.typeModif());
-		if()
+		ModifAlgo actModifAlgo = new ModifAlgo(joueur, robot, modifAlgo.getSlot(), modifAlgo.getType());
+
+		actModifAlgo.setNewOrdre(modifAlgo.getNewOrdre());
+		actModifAlgo.setSlot2(modifAlgo.getSlot2());
+
+		return actModifAlgo;
 	}
 }
