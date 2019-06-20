@@ -27,8 +27,7 @@ public class Robot extends Pion
 
 		this.cristal = null;
 		this.algo = new Ordre[3];
-
-		this.adresseImage = type + "Robot" + this.joueur.getIdJoueur();
+		this.adresseImage = "TwinTinBots/img/"+ type + "Robot" + this.joueur.getIdJoueur() + ".png";
 	}
 
 	/*---------------*/
@@ -215,11 +214,6 @@ public class Robot extends Pion
 				this.cristal = null;
 			}
 		}
-	}
-
-	public boolean equals(Robot robot)
-	{
-		return this.x == robot.x && this.y == robot.y && this.z == robot.z;
 	}
 
 	public String toString()

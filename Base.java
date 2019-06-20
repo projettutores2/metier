@@ -17,7 +17,7 @@ public class Base extends Pion
 
 		this.joueur = joueur;
 		this.stockCristaux = new ArrayList<Cristal>();
-		this.adresseImage = "base" + this.joueur.getIdJoueur() + ".png";
+		this.adresseImage = "TwinTinBots/img/"+  "base" + this.joueur.getIdJoueur() + ".png";
 	}
 
 	public void stocker( Cristal cristal )
@@ -40,15 +40,6 @@ public class Base extends Pion
 	public Joueur getJoueur()
 	{
 		return this.joueur;
-	}
-	public int getNbCristal(int valeur)
-	{
-		int nb = 0 ;
-		for(Cristal cristal : this.stockCristaux)
-		{
-			if(cristal.getValeur() == valeur) nb++ ;
-		}
-		return nb ;
 	}
 
 	public String toString()

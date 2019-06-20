@@ -12,8 +12,8 @@ public abstract class Pion
 	protected int y;
 	protected int z;
 
-	protected int xAxial;
-	protected int yAxial;
+	protected double xAxial;
+	protected double yAxial;
 
 	protected String adresseImage;
 
@@ -23,7 +23,6 @@ public abstract class Pion
 		this.y = y;
 		this.z = z;
 		this.transformerCoordonnees();
-
 	}
 
 	public int[] getCoords()
@@ -38,8 +37,8 @@ public abstract class Pion
 			     setCoord[2] == p.z    );
 	}
 
-	public int getXAxial() { return this.xAxial; }
-	public int getYAxial() { return this.yAxial; }
+	public double getXAxial() { return this.xAxial; }
+	public double getYAxial() { return this.yAxial; }
 
 	public String getAdresseImage() { return this.adresseImage; }
 
@@ -57,8 +56,11 @@ public abstract class Pion
 
 	public void transformerCoordonnees()
 	{
-		this.xAxial = ((int)((this.x-this.y)*Math.sin(Math.PI*60/180)/(38 + 366)));
-		this.yAxial = ((this.z * 38 * 3 + 500)/2);
+		//this.xAxial = ((this.x-this.y)*Math.sin(Math.PI*60/180))*(42.5)+472;
+		this.xAxial = ((this.x-this.y)*38+472);
+		//this.xAxial = ((this.x-this.y)*Math.sin(Math.PI*60/180)/(42.5) + 366);
+		System.out.println(this.x-this.y);
+		this.yAxial = ((this.z * 42.1 * 3 + 675)/2);
 	}
 
 	public void setPos( int x, int y, int z )
