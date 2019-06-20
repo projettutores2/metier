@@ -32,7 +32,7 @@ public class Metier
 	
 	public void jouer()
 	{
-		int choix;
+		ModifAlgo modifAlgo;
 		Ordre tmp;
 		boolean erreur;
 		nbTours++;
@@ -48,16 +48,16 @@ public class Metier
 				{
 					do
 					{
-						choix = this.ctrl.demandeAction();
+						modifAlgo = this.getActualModif(this.ctrl.demandeModif());
 					}
-					while(choix<1 || choix>5);
+					while(modifAlgo.getType()<1 || modifAlgo.getType()>5);
 				
-					switch (choix)
+					switch (modifAlgo.getType())
 					{
-						case 1: erreur=this.placerOrdre(joueur); break;
-						case 2: erreur=this.permuterOrdre(joueur); break;
-						case 3: erreur=this.retirerOrdre(joueur, -1); break;
-						case 4: erreur=this.redemarrerRobot(joueur); break;
+						case 1: erreur=this.placerOrdre(modifAlgo); break;
+						case 2: erreur=this.permuterOrdre(modifAlgo); break;
+						case 3: erreur=this.retirerOrdre(modifAlgo, -1); break;
+						case 4: erreur=this.redemarrerRobot(modifAlgo); break;
 						default :
 							erreur = false;
 							break;
@@ -66,6 +66,7 @@ public class Metier
 				while(erreur);
 
 				//Activation des algorithme
+
 				this.executionAlgo(joueur, 0);
 				this.executionAlgo(joueur, 1);		
 
@@ -129,67 +130,65 @@ public class Metier
 				}
 	}
 
-	private boolean placerOrdre(Joueur joueur)
+	private boolean placerOrdre(ModifAlgo modifAlgo)
 	{
-		int nouvelOrdre = this.ctrl.choisirOrdreJoueur(new Joueur(joueur));
-						
-		int   slot = this.ctrl.choisirSlot();
+		int nouvelOrdre = modifAlgo.getNewOrdre();
+		Joueur joueur = modifAlgo.getJoueur();
+		Robot robot = modifAlgo.getRobot();
+		int   slot = modifAlgo.getSlot();
 		if( slot<0 || slot>5 ) return true;
-		Ordre tmp  = joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3);
+		Ordre tmp  = robot.getOrdre(slot);
 		if(tmp!=null)
 		{
 			joueur.ajouter(tmp);
 			tmp = joueur.retirer(nouvelOrdre);
-			joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3, tmp);
+			robot.setOrdre(slot, tmp);
 		}
 		else
 		{
-			joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3,joueur.retirer(nouvelOrdre));
+			robot.setOrdre(slot,joueur.retirer(nouvelOrdre));
 		}
 		return false;
 	}
 
-	private boolean permuterOrdre(Joueur joueur)
+	private boolean permuterOrdre(ModifAlgo modifAlgo)
 	{
 		int slot1, slot2;
 
-		slot1 = this.ctrl.choisirSlot();
-		slot2 = this.ctrl.choisirSlot();
+		slot1 = modifAlgo.getSlot();
+		slot2 = modifAlgo.getSlot2();
 	
 		if(slot1<0 || slot1 >5 ||
 		   slot2<0 || slot2 >5 ||
 		   (slot1<3 != slot2<3)) return true;
 
-		Ordre tmp = joueur.getRobot((slot1 < 3 ? 0 : 1)).getOrdre(slot1%3);
-		joueur.getRobot((slot1 < 3 ? 0 : 1)).setOrdre(slot1%3, joueur.getRobot((slot2 < 3 ? 0 : 1)).getOrdre(slot2%3));
-		joueur.getRobot((slot2 < 3 ? 0 : 1)).setOrdre(slot2%3, tmp);
+		Joueur joueur = modifAlgo.getJoueur();
+		Robot  robot  = modifAlgo.getRobot();
+
+		Ordre tmp = robot.getOrdre(slot1);
+		robot.setOrdre(slot1, robot.getOrdre(slot2));
+		robot.setOrdre(slot2, tmp);
 		return false;
 	}
 
-	private boolean retirerOrdre(Joueur joueur, int slot)
+	private boolean retirerOrdre(ModifAlgo modifAlgo, int slot)
 	{
 		if(slot==-1)
 		{
-
-			slot = this.ctrl.choisirSlot();
+			slot = modifAlgo.getSlot();
 			if (slot < 0 || slot > 5 ) return true;
 		}
 
-		joueur.ajouter(joueur.getRobot((slot < 3 ? 0 : 1)).getOrdre(slot%3));
-		joueur.getRobot((slot < 3 ? 0 : 1)).setOrdre(slot%3, null);
+		modifAlgo.getJoueur().ajouter(modifAlgo.getRobot().getOrdre(slot));
+		modifAlgo.getRobot().setOrdre(slot, null);
 		return false;
 	}
 
-	private boolean redemarrerRobot(Joueur joueur)
+	private boolean redemarrerRobot(ModifAlgo modifAlgo)
 	{
-		int robot;
-			robot = this.ctrl.choisirRobot();
-		
-		if(robot!=0 && robot!=1) return true;
-
-		for(int i=0 ;  i<joueur.getRobot(robot).getAlgo().length ; i++)
+		for(int i=0 ;  i<modifAlgo.getRobot().getAlgo().length ; i++)
 		{
-			retirerOrdre(joueur, i+robot*3);
+			retirerOrdre(modifAlgo, i);
 		}
 		return false;
 	}
@@ -243,4 +242,19 @@ public class Metier
 		return this.pions;
 	}
 
+	public ModifAlgo getActualModif(ModifAlgo modifAlgo)
+	{
+		Joueur joueur;
+		Robot  robot;
+		for(Joueur actJoueur : this.joueurs)
+		{
+			if(modifAlgo.getJoueur().equals(actJoueur))
+			{
+				joueur = actJoueur;
+				joueur.getRobot(0).equals(modifAlgo.getRobot()) ? robot = joueur.getRobot(0) : robot = joueur.getRobot(1);
+			}
+		}
+		actModifAlgo = new ModifAlgo(joueur, robot, modifAlgo.slot(), modifAlgo.typeModif());
+		if()
+	}
 }

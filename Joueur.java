@@ -31,9 +31,17 @@ public class Joueur
 	{
 		this.nom         = joueur.nom;
 		this.metier      = joueur.metier;
-		this.stockOrdres = joueur.getStockOrdres();
-		this.ensRobots   = joueur.ensRobots;
+		this.stockOrdres = this.copyStock(joueur.getStockOrdres());
+		this.ensRobots   = new Robot[]{new Robot(joueur.getRobot(0)), new Robot(joueur.getRobot(1))};
 		this.nbPoint     = joueur.nbPoint;
+	}
+
+	public ArrayList<Ordre> copyStock(ArrayList<Ordre> stock)
+	{
+		ArrayList<Ordre> tmp = new ArrayList<Ordre>();
+		for(Ordre ordre : stock)
+			tmp.add(ordre);
+		return tmp;
 	}
 
 	public void ajouter(Ordre newOrdre)
@@ -78,16 +86,6 @@ public class Joueur
 		     return this.ensRobots[indRobot];
 		else return null ;
 	}
-	public int getScoreRobots()
-	{
-		int score =0;
-		for(int i = 0 ; i < 2 ; i++)
-		{
-			Cristal cristal = this.getRobot(i).getCristal();
-			if(cristal != null )score += cristal.getValeur()-1;
-		}
-		return score ;
-	}
 
 	public Robot[] getRobot()
 	{
@@ -107,4 +105,20 @@ public class Joueur
 	public int getNbJoueurs() { return this.metier.getNbJoueurs(); }
 
 	public String getNom(){return this.nom;}
+
+	public int getScoreRobots()
+    {
+        int score =0;
+        for(int i = 0 ; i < 2 ; i++)
+        {
+            Robot robot = this.getRobot(i).getCristal()
+            if(robot != null )score += robot.getValeur()-1;
+        }
+        return score ;
+    }
+
+	public boolean equals(Joueur joueur)
+	{
+		return this.nom == joueur.nom;
+	}
 }

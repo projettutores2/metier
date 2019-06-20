@@ -9,7 +9,8 @@ public class Robot extends Pion
 {
 	private Cristal cristal;
 	private Ordre[] algo;
-	private Joueur joueur;
+	private Joueur  joueur;
+	private String  type;
 
 	private int direction;
 
@@ -17,7 +18,7 @@ public class Robot extends Pion
 	/* CONSTRUCTEURS */
 	/*---------------*/
 
-	public Robot( int x, int y, int z, Joueur joueur, int dir )
+	public Robot( int x, int y, int z, Joueur joueur, int dir, String type )
 	{
 		super( x, y, z );
 
@@ -26,6 +27,8 @@ public class Robot extends Pion
 
 		this.cristal = null;
 		this.algo = new Ordre[3];
+
+		this.adresseImage = type + "Robot" + this.joueur.getIdJoueur();
 	}
 
 	/*---------------*/
@@ -108,7 +111,7 @@ public class Robot extends Pion
 				//Si oui, le pion à pousser est poussé et on déplace notre
 				//robot aux anciennes coordonnées du pion
 				Pion pionTmp2 = this.getPionCollision( coordTemp, this.joueur );
-				if ( pionTmp2 == null )
+				if ( pionTmp2 != null )
 				{
 					if ( !horsDeLaMap( tailleMap, coordTemp ) )
 					{
@@ -119,7 +122,7 @@ public class Robot extends Pion
 
 					//Déplacement du robot
 					coordTemp = this.getProchainesCoords(null);
-					if ( !horsDeLaMap( tailleMap, coordTemp ) )
+					if ( !horsDeLaMap( tailleMap, coordTemp ) && !this.collision( coordTemp, pionTmp ) )
 					{
 						this.x = coordTemp[0];
 						this.y = coordTemp[1];
@@ -214,12 +217,18 @@ public class Robot extends Pion
 		}
 	}
 
+	public boolean equals(Robot robot)
+	{
+		return this.x == robot.x && this.y == robot.y && this.z == robot.z;
+	}
+
 	public String toString()
 	{
 		String s = "Robot du joueur "+ this.joueur.getNom() +" - coords ";
 		s += String.format("%2d", this.x) + ":";
 		s += String.format("%2d", this.y) + ":";
 		s += String.format("%2d", this.z);
+		s += String.format("%2d", this.direction);
 		s += String.format("%6s", this.cristal!=null);
 
 		return s;

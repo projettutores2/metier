@@ -2,19 +2,25 @@ package TwinTinBots.ihm;
 import TwinTinBots.metier.Metier;
 import TwinTinBots.metier.Joueur;
 import TwinTinBots.metier.Pion;
+import TwinTinBots.metier.Ordre;
+import TwinTinBots.metier.Robot;
+import TwinTinBots.metier.ModifAlgo;
+
 import java.util.ArrayList;
 public class Controleur
 {
 	public static boolean DEBUG ;
 
-	private IHM ihm ;
+	private FenPrincipale ihm ;
 	private Metier metier;
 
-	public Controleur(boolean debug)
+	public Controleur(String[] tabNoms)
 	{
-		this.DEBUG = debug;
-		this.ihm    = new IHM(this) ;
-		this.metier = new Metier(this);
+		/*if(debug.equals("debug"))*/ DEBUG = false;
+		this.metier = new Metier(this, tabNoms);
+		
+		this.ihm    = new FenPrincipale(this);
+
 		//boucle de jeu
 		do
 		{
@@ -23,39 +29,47 @@ public class Controleur
 		while(!this.metier.getEnd());
 	}
 
-	public static void main(String[] agrs)
+	/*public static void main(String[] agrs)
 	{
-		boolean debug ;
-		debug = agrs.length > 0 && agrs[0].equals("debug");
-		new Controleur(debug);
-	}
+		new Controleur(agrs[0]);
+	}*/
 
 	//--------------------------------------------------------------
 	//                          LIEN AFFICHAGE
-	public void afficherAlgo(Joueur joueur)        { this.ihm.afficherAlgo(joueur);              }
-	public void afficherStockJoueur(Joueur joueur) { this.ihm.afficherStockJoueur(joueur);       }
-	public int  demandeAction()                    { return this.ihm.demandeAction();            }
-	public int  choisirSlot()                      { return this.ihm.choisirSlot();              }
-	public int  choisirRobot()                     { return this.ihm.choisirRobot();             }
-	public int  choisirOrdreJoueur(Joueur joueur)  { return this.ihm.choisirOrdreJoueur(joueur); }
+	public void afficherAlgo(Joueur joueur)        { /*this.ihm.afficherAlgo(joueur);        */}
+	public void afficherStockJoueur(Joueur joueur) { /*this.ihm.afficherStockJoueur(joueur); */}
+	public ModifAlgo  demandeModif()               { return this.ihm.demandeModif();           }
 	
 	//--------------------------------------------------------------
 	//                            LIEN SCANNER
 	public int    nombreDeJoueur () { return 2 ;      }
-	public String creeJoueur     () { return "teste ";}
+	public String creeJoueur     () { return "test ";}
 
 	public void afficherJeu() { this.ihm.afficherJeu(); }
 
 	//--------------------------------------------------------------
 	//                             GET
-	public IHM    getIhm()    { return this.ihm ;  }
-	public Metier getMetier() { return this.metier;}
-	public ArrayList<String> getListePions()
+	public FenPrincipale getIhm()    { return this.ihm ;  }
+	public Metier        getMetier() { return this.metier;}
+
+	public ArrayList<String> getStockJoueur(Joueur joueur)
 	{
 		ArrayList<String> tmp = new ArrayList<String>();
-		for(Pion pion : this.metier.getListePions())
-			tmp.add(pion.toString());
+		for(Ordre ordre : joueur.getStockOrdres())
+			tmp.add(ordre.toString());
 		return tmp;
+	}
 
+	public ArrayList<Pion> getListePions()
+	{
+		ArrayList<Pion> tmp = new ArrayList<Pion>();
+		for(Pion pion : this.metier.getListePions())
+			tmp.add(pion);
+		return tmp;
+	}
+
+	public Robot[] getRobotsCourants()
+	{
+		return this.metier.getRobotsCourants();
 	}
 }
