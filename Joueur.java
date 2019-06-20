@@ -86,6 +86,16 @@ public class Joueur
 		     return this.ensRobots[indRobot];
 		else return null ;
 	}
+	public int getScoreRobots()
+	{
+		int score =0;
+		for(int i = 0 ; i < 2 ; i++)
+		{
+			Cristal cristal = this.getRobot(i).getCristal();
+			if(cristal != null )score += cristal.getValeur()-1;
+		}
+		return score ;
+	}
 
 	public Robot[] getRobot()
 	{
