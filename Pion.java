@@ -37,6 +37,12 @@ public abstract class Pion
 			     setCoord[1] == p.y &&
 			     setCoord[2] == p.z    );
 	}
+	public boolean collision(Pion b )
+	{
+		return ( this.x == b.x &&
+			     this.y == b.y &&
+			     this.z == b.z    );
+	}
 
 	public double getXAxial() { return this.xAxial; }
 	public double getYAxial() { return this.yAxial; }

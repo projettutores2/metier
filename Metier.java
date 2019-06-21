@@ -1,6 +1,7 @@
 package TwinTinBots.metier;
 import TwinTinBots.ihm.Controleur;
 import TwinTinBots.ihm.Launcher;
+import TwinTinBots.ihm.DemandeCristaux;
 import java.util.ArrayList;
 import iut.algo.*;
 import java.util.Scanner;
@@ -12,24 +13,28 @@ public class Metier
 	private boolean            end;
 	private ArrayList<Joueur>  joueurs ;
 	private ArrayList<Pion>    pions;
+	private ArrayList<Cristal> cristals;
 	private int                indJoueurActif;
 	private int                nbTours;
 	private ModifAlgo          modifAlgo;
 	private String             scenario;
+	private String             positionCristaux;
 
 	public Metier(Controleur ctrl, String[] tabNoms)
 	{
 		//init
 		this.ctrl=ctrl;
-		this.joueurs = new ArrayList<Joueur>();
-		this.pions   = new ArrayList<Pion>();
+		this.positionCristaux="";
+		this.joueurs  = new ArrayList<Joueur>();
+		this.pions    = new ArrayList<Pion>();
+		this.cristals = new ArrayList<Cristal>();
 		this.nbTours = 0;
 		this.end = false;
 
 		//a la charge de creer et donner les ordres
 		if(! Controleur.DEBUG)
 		{
-			Regle.initialisation(this.joueurs,tabNoms.length,this.pions,this,"");
+			Regle.initialisation(this.joueurs,tabNoms.length,this.pions,this.cristals,this,"");
 			System.out.println(tabNoms.length);
 			for(int i = 0 ; i<tabNoms.length ; i++)
 				this.joueurs.get(i).setNom(tabNoms[i]);
@@ -43,7 +48,7 @@ public class Metier
 		else
 		{
 			this.scenario = tabNoms[0];
-			Regle.initialisation(this.joueurs,6,this.pions,this,scenario);
+			Regle.initialisation(this.joueurs,6,this.pions,this.cristals,this,scenario);
 		}
 	}
 
@@ -313,4 +318,51 @@ public class Metier
 
 		return actModifAlgo;
 	}
+	//ajout raphael
+	public boolean getStockVide() { return this.cristals.isEmpty(); }
+
+	public void spawnCristal()
+	{
+		if(!this.cristals.isEmpty())
+		{
+			for(Pion pion : this.pions)
+			{
+				if(pion.collision(this.cristals.get(0)))
+				{
+					new DemandeCristaux(this.ctrl);
+					while(!this.positionCristaux.equals(""))
+					{
+						System.out.print("");
+					}
+					this.popCristal();
+
+				}
+			}
+			this.pions.add(this.cristals.remove(0));
+		}
+
+	}
+	public void setPositionCristaux(String position)
+	{
+		this.positionCristaux=position ;
+	}
+	private void popCristal()
+	{
+		Cristal cristal = this.cristals.remove(0);
+		int x,y,z ;
+		x=y=z=0;
+		switch(this.positionCristaux)
+		{
+			case"Nord-Est"   : x=1  ; y=0  ; z=-1 ; break ;
+			case"Est"        : x=1  ; y=-1 ; z=0  ; break ;
+			case"Sud-Est"    : x=0  ; y=-1 ; z=1  ; break ;
+			case"Sud-Ouest"  : x=-1 ; y=0  ; z=+1 ; break ;
+			case"Ouest"      : x=-1 ; y=+1 ; z=0  ; break ;
+			case"Nord-Ouest" : x=0  ; y=+1 ; z=-1 ; break ;
+		}
+		cristal.setPos(x,y,z);
+		this.pions.add(cristal);
+		this.positionCristaux= "";
+	}
+
 }

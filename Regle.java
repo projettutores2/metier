@@ -13,13 +13,14 @@ public class Regle
 {
 	//regle de base du jeu 
 	private final static String[] NOM_ORDRE= {"avancer","avancerDouble","rotationDroite","rotationGauche","charger","decharger"};
-	private final static int CRISTAL_VERT = 3;
-	private final static int CRISTAL_BLEU = 2;
+	private final static int CRISTAL_VERT  = 3;
+	private final static int CRISTAL_BLEU  = 2;
+	private final static int CRISTAL_ROUGE = 4;
 
-	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,Metier metier,String scenario)
+	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,ArrayList<Cristal> cristals,Metier metier,String scenario)
 	{
 		//on scanne la map en fonction du nombre de joueur
-		Regle.scanner(joueurs,nbJoueur,pions,metier,scenario);
+		Regle.scanner(joueurs,nbJoueur,pions,cristals,metier,scenario);
 		EnumOrdre enumTmp = null ;
 		Ordre tmp = null;
 		for(Joueur joueur : joueurs)
@@ -41,7 +42,7 @@ public class Regle
 		}
 	}
 
-	private static void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,Metier metier,String scenario)
+	private static void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,ArrayList<Cristal> cristals,Metier metier,String scenario)
 	{
 		try
 		{
@@ -104,10 +105,24 @@ public class Regle
 							if(cristal != null) pions.add(cristal);
 						}
 					}
+					if(chaine[1].equals("stock"))
+					{
+						if(chaine[2].equals("vert"))
+							Regle.creeCristalStock(cristals,Regle.CRISTAL_VERT,Integer.parseInt(chaine[3]));
+						if(chaine[2].equals("rouge"))
+							Regle.creeCristalStock(cristals,Regle.CRISTAL_ROUGE,Integer.parseInt(chaine[3]));
+
+					}
 				}
 			}
 			sc.close();
 		}
 		catch(Exception e) { e.printStackTrace(); }
+	}
+
+	private static void creeCristalStock(ArrayList<Cristal> cristals,int valeur,int nb)
+	{
+		for(int i = 0 ; i < nb ; i++)
+			cristals.add(new Cristal(0,0,0,valeur));
 	}
 }

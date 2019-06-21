@@ -43,6 +43,7 @@ public class Controleur
 	//                            LIEN SCANNER
 	public int    nombreDeJoueur () { return 2 ;      }
 	public String creeJoueur     () { return "test ";}
+	public void envoiChaine      (String chaine) { this.metier.setPositionCristaux(chaine);}
 
 	public void afficherJeu() { this.ihm.afficherJeu(); }
 
