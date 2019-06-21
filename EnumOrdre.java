@@ -1,9 +1,7 @@
-/** EnumOrdre
-  * date : 17/08/2019
-  * @author : Equipe 14
-  * @version 1
-  */
-
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
 public enum EnumOrdre
 {
@@ -18,13 +16,16 @@ public enum EnumOrdre
 	private int    nombre;
 	private String adresseImg;
 
+	//--------------------------------------------------------------------------------
+ 	//                                     CONSTRUCTEUR
 	private EnumOrdre(String nom,int nombre, String adresseImg)
 	{
 		this.nom        = nom;
 		this.nombre     = nombre;
 		this.adresseImg = adresseImg;
 	}
-
+	//--------------------------------------------------------------------------------
+ 	//                                     PUBLIC
 	public Ordre creeOrdre()
 	{
 		Ordre tmp = null ;
@@ -45,7 +46,8 @@ public enum EnumOrdre
 		}
 		return tmp ;
 	}
-
+  	//--------------------------------------------------------------------------------
+    //                                     GET
 	public int getNombre() { return this.nombre;}
 
 }

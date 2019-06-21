@@ -1,9 +1,7 @@
-/** Regle
-  * date : 17/08/2019
-  * @author : Equipe 14
-  * @version 1
-  */
-
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,6 +15,8 @@ public class Regle
 	public final static int CRISTAL_BLEU  = 2;
 	public final static int CRISTAL_ROUGE = 4;
 
+	//--------------------------------------------------------------------------------
+ 	//                                     PUBLIC
 	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,ArrayList<Cristal> cristals,Metier metier,String scenario)
 	{
 		//on scanne la map en fonction du nombre de joueur
@@ -41,7 +41,8 @@ public class Regle
 			}
 		}
 	}
-
+	//--------------------------------------------------------------------------------
+ 	//                                     PRIVATE
 	private static void scanner(ArrayList<Joueur> joueurs ,int nbJoueur,ArrayList<Pion> pions,ArrayList<Cristal> cristals,Metier metier,String scenario)
 	{
 		try

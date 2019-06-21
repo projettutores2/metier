@@ -1,3 +1,7 @@
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
 import TwinTinBots.ihm.Controleur;
 import TwinTinBots.ihm.Launcher;
@@ -10,37 +14,47 @@ import java.io.FileReader;
 public class Metier
 {
 	private Controleur         ctrl ;
+	//gere la fin
 	private boolean            end;
+	//list des element du jeu
 	private ArrayList<Joueur>  joueurs ;
 	private ArrayList<Pion>    pions;
 	private ArrayList<Cristal> cristals;
+	//int gestion des tour de jeu
 	private int                indJoueurActif;
 	private int                nbTours;
 	private int                tourFin;
+	//transaction envoier de e l'ihm 
 	private ModifAlgo          modifAlgo;
+	//information capter de l'ihm
 	private String             scenario;
 	private String             positionCristaux;
+	//gere les condition de victoire
 	private Victoire           victoire;
 
+ 	//--------------------------------------------------------------------------------
+ 	//                                     CONSTRUCTEUR
 	public Metier(Controleur ctrl, String[] tabNoms)
 	{
 		//init
-		this.ctrl=ctrl;
-		this.positionCristaux="";
-		this.joueurs = new ArrayList<Joueur>();
-		this.pions   = new ArrayList<Pion>();
+		this.joueurs  = new ArrayList<Joueur>();
+		this.pions    = new ArrayList<Pion>();
 		this.cristals = new ArrayList<Cristal>();
-		this.nbTours = 0;
-		this.tourFin = 0;
-		this.end = false;
+		this.positionCristaux ="";
+		this.nbTours          = 0;
+		this.tourFin          = 0;
+		this.end              = false;
+		this.ctrl             =ctrl;
 
 		//a la charge de creer et donner les ordres
+		//En partie normal
 		if(! Controleur.DEBUG)
 		{
 			Regle.initialisation(this.joueurs,tabNoms.length,this.pions,this.cristals,this,"");
 			for(int i = 0 ; i<tabNoms.length ; i++)
 				this.joueurs.get(i).setNom(tabNoms[i]);
 		}
+		//en mode scenario
 		else
 		{
 			this.scenario = tabNoms[0];
@@ -49,7 +63,8 @@ public class Metier
 		this.victoire = new Victoire(this.pions, this.joueurs.size(), this);
 	}
 
-	
+	//--------------------------------------------------------------------------------
+ 	//                                     PUBLIC
 	public void jouer()
 	{
 		Ordre tmp;
@@ -59,16 +74,20 @@ public class Metier
 		{
 			this.debugActif(scenario);
 		}
+		//boucle tour de jeu complet
 		for(Joueur joueur : this.joueurs)
 		{
+			//initialisation du tour joueur
 			this.modifAlgo = new ModifAlgo();
 			this.indJoueurActif = this.joueurs.indexOf(joueur);
 			this.ctrl.afficherJeu();
+			//attante et traitement de la transation
 			this.typeAction(this.modifAlgo);
 
 			//Activation des algorithme
 			this.executionAlgo(joueur, 0);
 			this.executionAlgo(joueur, 1);
+			//affichage sur console de la list des pion
 			for(Pion pion : pions)
 				System.out.println(pion);
 
@@ -81,7 +100,33 @@ public class Metier
 			if(this.end) break;
 		}
 	}
+	//apprais un nouveau cristal stocker sur la map
+	public void spawnCristal()
+	{
+		boolean actif = false;
+		if(!this.cristals.isEmpty())
+		{
+			for(Pion pion : this.pions)
+			{
+				if(pion.collision(this.cristals.get(0)))
+				{
+					actif=true;
+					break;
+				}
+			}
+			if(actif)
+				//au choix du joueur si millieu occuper
+				this.popCristal();
+			else
+				//au millieu
+				this.pions.add(this.cristals.remove(0));
+		}
 
+	}
+	//--------------------------------------------------------------
+	//                             PRIVATE
+
+	//execute l'action du joueur enrengistrer par l'ihm
 	private void typeAction(ModifAlgo modifAlgo)
 	{
 		do { System.out.print(""); } while(!modifAlgo.getReady());
@@ -94,7 +139,7 @@ public class Metier
 			case 4: this.redemarrerRobot(modifAlgo) ; break;
 		}
 	}
-
+	//Mode scenario , execute un script entrer
 	private void debugActif(String scenario)
 	{
 		try
@@ -116,10 +161,6 @@ public class Metier
 				this.ctrl.afficherJeu();
 
 				//Vérification de fin de partie
-				//if(this.cristals.isEmpty() && this.tourFin==0)
-				//	this.tourFin = this.nbTours + 3;
-
-				//this.victoire.setEnd(this.nbTours==this.tourFin);
 				this.victoire.estFinie();
 				if(this.end) break;
 			}
@@ -130,7 +171,7 @@ public class Metier
 		this.victoire.estFinie();
 		 this.end=true;
 	}
-
+	//execute l'algo du robot
 	private void executionAlgo(Joueur joueur, int idRobot)
 	{
 		this.ctrl.afficherJeu();
@@ -144,7 +185,7 @@ public class Metier
 			}
 		this.ctrl.afficherJeu();
 	}
-
+	//ajoute un ordre
 	private void placerOrdre(ModifAlgo modifAlgo)
 	{
 		int nouvelOrdre = modifAlgo.getNewOrdre();
@@ -163,7 +204,7 @@ public class Metier
 			robot.setOrdre(slot,joueur.retirer(nouvelOrdre));
 		}
 	}
-
+	//permute un ordre
 	private void permuterOrdre(ModifAlgo modifAlgo)
 	{
 		int slot1, slot2;
@@ -178,7 +219,7 @@ public class Metier
 		robot.setOrdre(slot1, robot.getOrdre(slot2));
 		robot.setOrdre(slot2, tmp);
 	}
-
+	//retire un ordre
 	private void retirerOrdre(ModifAlgo modifAlgo, int slot)
 	{
 		if(slot==-1)
@@ -189,7 +230,7 @@ public class Metier
 		modifAlgo.getJoueur().ajouter(modifAlgo.getRobot().getOrdre(slot));
 		modifAlgo.getRobot().setOrdre(slot, null);
 	}
-
+	//retire tout les ordre d'un robot
 	private void redemarrerRobot(ModifAlgo modifAlgo)
 	{
 		for(int i=0 ;  i<modifAlgo.getRobot().getAlgo().length ; i++)
@@ -197,7 +238,7 @@ public class Metier
 			retirerOrdre(modifAlgo, i);
 		}
 	}
-
+	//traitement du langague du script debug
 	private void ordreDebug(Joueur joueur,String[] algo,int indiceRobot)
 	{
 		for(int i = 0 ; i < algo.length ; i++)
@@ -221,116 +262,7 @@ public class Metier
 		this.ctrl.afficherJeu();
 		this.executionAlgo(joueur, indiceRobot);
 	}
-
-	//--------------------------------------------------------------
-	//                             GET
-	public Joueur getJoueurs(String nom)
-	{
-		for(Joueur joueur : this.joueurs)
-		{
-			if(joueur.getNom().equals(nom))
-				return joueur;
-		}
-		return null ;
-	}
-
-	public ArrayList<Joueur> getListJoueur()
-	{
-		ArrayList<Joueur> tmp = new ArrayList<Joueur>();
-		for(Joueur joueur : this.joueurs)
-			tmp.add(new Joueur(joueur));
-		return tmp;
-	}
-
-	public Robot[] getRobotsCourants()
-	{
-		return this.joueurs.get(this.indJoueurActif).getRobot();
-	}
-
-	public int getNbJoueurs()
-	{
-		return this.joueurs.size();
-	}
-
-	public int getNombreTour()
-	{
-		return this.nbTours;
-	}
-
-	public int getIndJoueurActif(){return this.indJoueurActif;}
-
-	public Joueur getJoueurActif()
-	{
-		return /*new Joueur(*/this.joueurs.get(this.indJoueurActif);//);
-	}
-
-	public int getScoreJoueurActif()
-	{
-		for(Pion pion : this.pions)
-			if(pion instanceof Base)
-				if(((Base)pion).getJoueur()==this.joueurs.get(indJoueurActif))
-					return ((Base)pion).getScore();
-		return -1;
-	}
-
-	public boolean getEnd() {return this.end ;}
-
-	public String getGagnant()
-	{
-		String gagnant = "";
-		if(this.victoire.getEgalite())
-		{
-			gagnant += "Egalité entre : ";
-			for(Joueur joueur : this.victoire.getGagnants())
-				gagnant+= joueur.getNom() + " ";
-		}
-		else
-			gagnant+=this.victoire.getJoueurGagnant().getNom();
-		return gagnant;
-	}
-	
-	public ArrayList<Pion> getListePions()
-	{
-		return this.pions;
-	}
-
-	public ModifAlgo getModifAlgo()
-	{
-		return this.modifAlgo;
-	}
-
-	public boolean getStockVide() { return this.cristals.isEmpty(); }
-
-	public void spawnCristal()
-	{
-		boolean actif = false;
-		if(!this.cristals.isEmpty())
-		{
-			for(Pion pion : this.pions)
-			{
-				if(pion.collision(this.cristals.get(0)))
-				{
-					actif=true;
-					break;
-				}
-			}
-			if(actif)
-				this.popCristal();
-			else
-				this.pions.add(this.cristals.remove(0));
-		}
-
-	}
-	public void setPositionCristaux(String position)
-	{
-		this.positionCristaux=position ;
-	}
-
-	public void setEnd(boolean b)
-	{
-		this.end = b;
-	}
-
+	//place un cristal sur la map en cas d'ajout d'un cristal dans une base
 	private void popCristal()
 	{
 		Cristal cristal = this.cristals.remove(0);
@@ -367,4 +299,67 @@ public class Metier
 
 		this.pions.add(cristal);
 	}
+
+	//--------------------------------------------------------------
+	//                             GET
+
+	public ArrayList<Pion> getListePions     () { return this.pions;                            }
+	public ModifAlgo       getModifAlgo      () { return this.modifAlgo;                        }
+	public boolean         getStockVide      () { return this.cristals.isEmpty();               }
+	public int             getNbJoueurs      () { return this.joueurs.size();                   }
+	public int             getNombreTour     () { return this.nbTours;                          }
+	public int             getIndJoueurActif () { return this.indJoueurActif;                   }  
+	public Joueur          getJoueurActif    () { return this.joueurs.get(this.indJoueurActif); }
+	public boolean         getEnd            () { return this.end ;                             }
+
+	public Joueur getJoueurs(String nom)
+	{
+		for(Joueur joueur : this.joueurs)
+		{
+			if(joueur.getNom().equals(nom))
+				return joueur;
+		}
+		return null ;
+	}
+	//renvois une copie profonde de la list de joueu
+	public ArrayList<Joueur> getListJoueur()
+	{
+		ArrayList<Joueur> tmp = new ArrayList<Joueur>();
+		for(Joueur joueur : this.joueurs)
+			tmp.add(new Joueur(joueur));
+		return tmp;
+	}
+	//get le robot du joueur actif
+	public Robot[] getRobotsCourants()
+	{
+		return this.joueurs.get(this.indJoueurActif).getRobot();
+	}
+	//donne le score actuelle du joueur actif
+	public int getScoreJoueurActif()
+	{
+		for(Pion pion : this.pions)
+			if(pion instanceof Base)
+				if(((Base)pion).getJoueur()==this.joueurs.get(indJoueurActif))
+					return ((Base)pion).getScore();
+		return -1;
+	}
+	//ecris le string du/des gagnant
+	public String getGagnant()
+	{
+		String gagnant = "";
+		if(this.victoire.getEgalite())
+		{
+			gagnant += "Egalité entre : ";
+			for(Joueur joueur : this.victoire.getGagnants())
+				gagnant+= joueur.getNom() + " ";
+		}
+		else
+			gagnant+=this.victoire.getJoueurGagnant().getNom();
+		return gagnant;
+	}
+	//--------------------------------------------------------------
+	//                             SET
+
+	public void setPositionCristaux(String position) { this.positionCristaux = position ;}
+	public void setEnd             (boolean b)       { this.end = b;                     }
 }

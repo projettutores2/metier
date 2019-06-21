@@ -1,9 +1,7 @@
-/** Joueur
-  * date : 17/08/2019
-  * @author : Equipe 14
-  * @version 1
-  */
-
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
 import java.util.ArrayList;
 
@@ -16,7 +14,9 @@ public class Joueur
 	private Robot[]          ensRobots;
 	private int              nbPoint;
 	private int              idJoueur;
-	
+
+	//--------------------------------------------------------------------------------
+ 	//                                     CONSTRUCTEUR
 	public Joueur(String nom,Metier metier)
 	{
 		this.idJoueur    = nbJoueurs++;
@@ -35,20 +35,14 @@ public class Joueur
 		this.ensRobots   = joueur.ensRobots;
 		this.nbPoint     = joueur.nbPoint;
 	}
-
-	public ArrayList<Ordre> copyStock(ArrayList<Ordre> stock)
-	{
-		ArrayList<Ordre> tmp = new ArrayList<Ordre>();
-		for(Ordre ordre : stock)
-			tmp.add(ordre);
-		return tmp;
-	}
-
+	//--------------------------------------------------------------------------------
+ 	//                                     PUBLIC
+ 	//ajoute au jouer un ordre
 	public void ajouter(Ordre newOrdre)
 	{
 		if(newOrdre != null ) this.stockOrdres.add(newOrdre);
 	}
-
+	//retire au joueur un ordre
 	public Ordre retirer(int indice)
 	{
 		if(indice < this.stockOrdres.size())
@@ -56,57 +50,47 @@ public class Joueur
 		else 
 			return null ;
 	}
-	
+	//ajoute les robot au joueur
 	public void creeRobot(Robot robot1, Robot robot2)
 	{
 		this.ensRobots[0] = robot1;
 		this.ensRobots[1] = robot2;
 	}
-	
-	public void setPosRobot(int x, int y, int z, int indRobot)
+	//verifie l'egalité entre deux joueur
+	public boolean equals(Joueur joueur)
 	{
-		if(indRobot < this.ensRobots.length)
-			this.ensRobots[indRobot].setPos(x,y,z);
+		return this.nom == joueur.nom;
 	}
-	
-	//Set
-	public void setNom(String nom)
+
+	//--------------------------------------------------------------------------------
+ 	//                                     PRIVATE
+	//cree une copi profonde
+	private ArrayList<Ordre> copyStock(ArrayList<Ordre> stock)
 	{
-		this.nom = nom;
+		ArrayList<Ordre> tmp = new ArrayList<Ordre>();
+		for(Ordre ordre : stock)
+			tmp.add(ordre);
+		return tmp;
 	}
-	
-	//Get
-	public int getIdJoueur()
-	{
-		return this.idJoueur;
-	}
-	
+	//--------------------------------------------------------------------------------
+    //                                     GET
+
+    public int              getIdJoueur    () { return this.idJoueur;               }
+    public Metier           getMetier      () { return this.metier;                 }
+    public Robot[]          getRobot       () { return this.ensRobots;              }
+	public ArrayList<Ordre> getStockOrdres () { return this.stockOrdres;            }
+	public ArrayList<Pion>  getListePions  () { return this.metier.getListePions(); }
+	public int              getNbJoueurs   () { return this.metier.getNbJoueurs();  }
+	public String           getNom         () { return this.nom;                    }
+
+	//revoins le robot de l'indice entrer
 	public Robot getRobot(int indRobot)
 	{
 		if(indRobot < this.ensRobots.length)
 		     return this.ensRobots[indRobot];
 		else return null ;
 	}
-
-	public Robot[] getRobot()
-	{
-		return this.ensRobots;
-	}
-	
-	public ArrayList<Ordre> getStockOrdres()
-	{
-		return this.stockOrdres;
-	}
-
-	public ArrayList<Pion> getListePions()
-	{
-		return this.metier.getListePions();
-	}
-
-	public int getNbJoueurs() { return this.metier.getNbJoueurs(); }
-
-	public String getNom(){return this.nom;}
-
+	//renvois le score des cristaux que porte les robot 
 	public int getScoreRobots()
 	{
 		int score =0;
@@ -118,13 +102,13 @@ public class Joueur
 		return score ;
 	}
 
-	public Metier getMetier()
+    //--------------------------------------------------------------------------------
+    //                                     SET
+    public void setNom(String nom) { this.nom = nom; }
+	public void setPosRobot(int x, int y, int z, int indRobot)
 	{
-		return this.metier;
+		if(indRobot < this.ensRobots.length)
+			this.ensRobots[indRobot].setPos(x,y,z);
 	}
-
-	public boolean equals(Joueur joueur)
-	{
-		return this.nom == joueur.nom;
-	}
+	
 }

@@ -1,13 +1,15 @@
-/** Cristal
-  * date : 17/08/2019
-  * @author : Equipe 14
-  * @version 1
-  */
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
+
 public class Cristal extends Pion
 {
 	private int valeur;
 
+	//--------------------------------------------------------------------------------
+ 	//                                     CONSTRUCTEUR
 	public Cristal( int x, int y, int z, int valeur )
 	{
 		super( x, y, z );
@@ -15,7 +17,8 @@ public class Cristal extends Pion
 		this.adresseImage = "TwinTinBots/img/"+ "cristal" + valeur + "Plateau.png";
 	}
 
-	public int getValeur() { return this.valeur; }
+	//--------------------------------------------------------------------------------
+ 	//                                     PUBLIC
 
 	public String toString()
 	{
@@ -24,7 +27,10 @@ public class Cristal extends Pion
 		s += String.format("%2d", this.y) + ":";
 		s += String.format("%2d", this.z);
 		s += "\n\tValeur : " + this.valeur;
-
 		return s;
 	}
+
+	//--------------------------------------------------------------------------------
+	//                                     GET
+	public int getValeur() { return this.valeur; }
 }

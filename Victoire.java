@@ -1,3 +1,7 @@
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
 import java.util.ArrayList;
 
@@ -16,6 +20,8 @@ public class Victoire
 
 	private boolean         fin;
 
+	//--------------------------------------------------------------------------------
+ 	//                                     CONSTRUCTEUR
 	public Victoire(ArrayList<Pion> pions,int nbJoueur,Metier metier)
 	{
 		this.metier=metier;
@@ -36,6 +42,8 @@ public class Victoire
 		}
 	}
 
+	//--------------------------------------------------------------------------------
+ 	//                                     PUBLIC
 	public void estFinie()
 	{
 		//si un joueur depasse le score de victoire
@@ -76,7 +84,6 @@ public class Victoire
 				this.gagner(gagnant);
 				return ; 
 			}
-
 			// on compare le nombre de cristaux bleu et vert
 			int scoreGagnantBleu =0 ;
 			int scoreEgaliteBleu =0 ;
@@ -95,13 +102,13 @@ public class Victoire
 					scoreEgaliteVert = base.getNbCristal(Regle.CRISTAL_VERT);
 				}
 			}
-
+			//compare les cristaux bleu , puits vert
 			if(scoreGagnantBleu > scoreEgaliteBleu)           this.gagner(gagnant);
 			else if (scoreGagnantBleu < scoreEgaliteBleu)     this.gagner(egalite);
 			else
 			{
-				if(scoreGagnantBleu > scoreEgaliteBleu)       this.gagner(gagnant);
-				else if (scoreGagnantBleu < scoreEgaliteBleu) this.gagner(egalite);
+				if(scoreGagnantVert > scoreEgaliteVert)       this.gagner(gagnant);
+				else if (scoreGagnantVert < scoreEgaliteVert) this.gagner(egalite);
 				else
 				{
 					this.gagnants[0] = gagnant;
@@ -110,11 +117,8 @@ public class Victoire
 			}
 		}
 	}
-
-	public void setEnd(boolean b)
-	{
-		this.fin = b;
-	}
+	//--------------------------------------------------------------------------------
+ 	//                                    PRIVATE
 
 	private void gagner(Joueur joueur)
 	{
@@ -127,5 +131,9 @@ public class Victoire
 	public Joueur  getJoueurGagnant() { return this.joueurGagnant; }
 	public Joueur[]  getGagnants()    { return this.gagnants;      }
 	public boolean getEgalite()       { return this.egalite;       }
+
+	//--------------------------------------------------------------------------------
+ 	//                                      SET
+ 	public void setEnd(boolean b)  {  this.fin = b; }
 
 }

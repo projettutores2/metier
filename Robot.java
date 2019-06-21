@@ -1,8 +1,7 @@
-/** Robot
-  * date : 17/08/2019
-  * @author : Equipe 14
-  * @version 1
-  */
+/*
+ * date : 17/08/2019
+ * @author : Equipe 14
+ */
 package TwinTinBots.metier;
 
 public class Robot extends Pion
@@ -14,10 +13,8 @@ public class Robot extends Pion
 
 	private int direction;
 
-	/*---------------*/
-	/* CONSTRUCTEURS */
-	/*---------------*/
-
+	//--------------------------------------------------------------------------------
+ 	//                                     CONSTRUCTEUR
 	public Robot( int x, int y, int z, Joueur joueur, int dir, String type )
 	{
 		super( x, y, z );
@@ -31,75 +28,14 @@ public class Robot extends Pion
 		this.adresseImage = "./TwinTinBots/img/"+ type + "Robot" + this.joueur.getIdJoueur() + ".png";
 	}
 
-	/*---------------*/
-	/*    GETTERS    */
-	/*---------------*/
-
-	public Ordre[] getAlgo()         { return this.algo;    }
-	public Cristal getCristal()      { return this.cristal; }
-
-	public int[] getProchainesCoords(int[] coordTemp)
-	{
-		/* Le tableau coordTemp regroupe les trois coordonnées d'un robot
-		 * Les indices correspondent à :
-		 *    =>   0 : x
-		 *    =>   1 : y
-		 *    =>   2 : z
-		 */
-		if(coordTemp==null)
-			coordTemp = this.getCoords();
-
-		switch ( this.direction )
-		{
-			case 0: coordTemp[2]--;coordTemp[0]++; break;
-			case 1: coordTemp[0]++;coordTemp[1]--; break;
-			case 2: coordTemp[1]--;coordTemp[2]++; break;
-			case 3: coordTemp[2]++;coordTemp[0]--; break;
-			case 4: coordTemp[0]--;coordTemp[1]++; break;
-			case 5: coordTemp[1]++;coordTemp[2]--; break;
-		}
-
-		return coordTemp;
-	}
-	public Ordre   getOrdre( int indice ) 
-	{
-		if(indice < this.algo.length)
-			return this.algo[indice]; 
-		else return null;
-	}
-
-	public Joueur getJoueur()
-	{
-		return new Joueur(this.joueur);
-	}
-
-	public double getDoubleDirection() { return super.getDoubleDirection()*this.direction; }
-
-	/*---------------*/
-	/*    SETTERS    */
-	/*---------------*/
-
-	public void setOrdre( int indice, Ordre ordre ) 
-	{
-		if(indice < this.algo.length)
-			this.algo[indice] = ordre; 
-	}
-
-	public void setCristal( Cristal cristal ) { this.cristal = cristal; }
-
-
-
-	/*---------------*/
-	/*    AUTRES     */
-	/*---------------*/
+	//--------------------------------------------------------------------------------
+ 	//                                    PUBLIC
 
 	public void avancer()
 	{
 		int tailleMap = ( ( this.joueur.getNbJoueurs() > 4 ) ? 5:4 );
-
 		//Déplacement fictif du pion pour vérifier qu'il y a une collision après
 		int[] coordTemp = this.getProchainesCoords(null);
-
 		Pion pionTmp = this.getPionCollision( coordTemp, this.joueur );
 		//Si le pion de la case devant n'est pas null (donc case occupée)
 		if ( pionTmp != null )
@@ -108,8 +44,6 @@ public class Robot extends Pion
 			if ( !( pionTmp instanceof Base ) )
 			{
 				//On déplace le pion dans le sens de la direction
-
-				
 				coordTemp=this.getProchainesCoords(coordTemp);
 
 				//On vérifie que la place est libre pour le pion à pousser
@@ -132,7 +66,6 @@ public class Robot extends Pion
 						this.x = coordTemp[0];
 						this.y = coordTemp[1];
 						this.z = coordTemp[2];
-
 						this.transformerCoordonnees();
 					}
 				}
@@ -242,4 +175,61 @@ public class Robot extends Pion
 
 		return s;
 	}
+
+
+	//--------------------------------------------------------------------------------
+ 	//                                     GET
+
+	public Ordre[] getAlgo()         { return this.algo;    }
+	public Cristal getCristal()      { return this.cristal; }
+
+	public int[] getProchainesCoords(int[] coordTemp)
+	{
+		/* Le tableau coordTemp regroupe les trois coordonnées d'un robot
+		 * Les indices correspondent à :
+		 *    =>   0 : x
+		 *    =>   1 : y
+		 *    =>   2 : z
+		 */
+		if(coordTemp==null)
+			coordTemp = this.getCoords();
+
+		switch ( this.direction )
+		{
+			case 0: coordTemp[2]--;coordTemp[0]++; break;
+			case 1: coordTemp[0]++;coordTemp[1]--; break;
+			case 2: coordTemp[1]--;coordTemp[2]++; break;
+			case 3: coordTemp[2]++;coordTemp[0]--; break;
+			case 4: coordTemp[0]--;coordTemp[1]++; break;
+			case 5: coordTemp[1]++;coordTemp[2]--; break;
+		}
+
+		return coordTemp;
+	}
+	public Ordre   getOrdre( int indice ) 
+	{
+		if(indice < this.algo.length)
+			return this.algo[indice]; 
+		else return null;
+	}
+
+	public Joueur getJoueur()
+	{
+		return new Joueur(this.joueur);
+	}
+
+	public double getDoubleDirection() { return super.getDoubleDirection()*this.direction; }
+
+	//--------------------------------------------------------------------------------
+ 	//                                     SET
+
+	public void setOrdre( int indice, Ordre ordre ) 
+	{
+		if(indice < this.algo.length)
+			this.algo[indice] = ordre; 
+	}
+
+	public void setCristal( Cristal cristal ) { this.cristal = cristal; }
+
+
 }
