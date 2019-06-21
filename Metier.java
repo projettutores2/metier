@@ -17,7 +17,7 @@ public class Metier
 	private int                indJoueurActif;
 	private int                nbTours;
 	private int                tourFin;
-	private ModifAlgo          modifAlgo, modifAlgo2;
+	private ModifAlgo          modifAlgo;
 	private String             scenario;
 	private String             positionCristaux;
 	private Victoire           victoire;
@@ -62,16 +62,11 @@ public class Metier
 		for(Joueur joueur : this.joueurs)
 		{
 			this.modifAlgo = new ModifAlgo();
-			this.modifAlgo2 = new ModifAlgo();
 			this.indJoueurActif = this.joueurs.indexOf(joueur);
 			this.ctrl.afficherJeu();
 			this.typeAction(this.modifAlgo);
-			if(this.nbTours==1)
-				this.typeAction(this.modifAlgo2);
 
 			//Activation des algorithme
-
-			
 			this.executionAlgo(joueur, 0);
 			this.executionAlgo(joueur, 1);
 			for(Pion pion : pions)
@@ -262,6 +257,8 @@ public class Metier
 		return this.nbTours;
 	}
 
+	public int getIndJoueurActif(){return this.indJoueurActif;}
+
 	public Joueur getJoueurActif()
 	{
 		return /*new Joueur(*/this.joueurs.get(this.indJoueurActif);//);
@@ -300,11 +297,6 @@ public class Metier
 	public ModifAlgo getModifAlgo()
 	{
 		return this.modifAlgo;
-	}
-
-	public ModifAlgo getModifAlgo2()
-	{
-		return this.modifAlgo2;
 	}
 
 	public boolean getStockVide() { return this.cristals.isEmpty(); }
