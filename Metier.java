@@ -89,7 +89,7 @@ public class Metier
 
 	private void typeAction(ModifAlgo modifAlgo)
 	{
-		do { System.out.print(""); } while(modifAlgo.getReady());
+		do { System.out.print(""); } while(!modifAlgo.getReady());
 
 		switch (modifAlgo.getType())
 		{
@@ -131,6 +131,8 @@ public class Metier
 		  sc.close();
 		}
 		 catch(Exception e) { e.printStackTrace(); }
+		 this.victoire.setEnd(true);
+		this.victoire.estFinie();
 		 this.end=true;
 	}
 
@@ -316,15 +318,11 @@ public class Metier
 			{
 				if(pion.collision(this.cristals.get(0)))
 				{
-					new DemandeCristaux(this.ctrl);
-					while(this.positionCristaux.equals(""))
-					{
-						System.out.print("");
-					}
-					actif = true;
+					actif=true;
+					break;
 				}
 			}
-			if (actif)
+			if(actif)
 				this.popCristal();
 			else
 				this.pions.add(this.cristals.remove(0));
@@ -344,21 +342,37 @@ public class Metier
 	private void popCristal()
 	{
 		Cristal cristal = this.cristals.remove(0);
-		int x,y,z ;
-		x=y=z=0;
-		System.out.println(this.positionCristaux);
-		switch(this.positionCristaux)
+		boolean bonPlacement ;
+		do
 		{
-			case"Nord-Est"   : x=1  ; y=0  ; z=-1 ; break ;
-			case"Est"        : x=1  ; y=-1 ; z=0  ; break ;
-			case"Sud-Est"    : x=0  ; y=-1 ; z=1  ; break ;
-			case"Sud-Ouest"  : x=-1 ; y=0  ; z=+1 ; break ;
-			case"Ouest"      : x=-1 ; y=+1 ; z=0  ; break ;
-			case"Nord-Ouest" : x=0  ; y=+1 ; z=-1 ; break ;
+			bonPlacement = true ;
+
+			new DemandeCristaux(this.ctrl);
+			while(this.positionCristaux.equals(""))
+			{
+				System.out.print("");
+			}
+
+			int x,y,z ;
+			x=y=z=0;
+			switch(this.positionCristaux)
+			{
+				case"Nord-Est"   : x=1  ; y=0  ; z=-1 ; break ;
+				case"Est"        : x=1  ; y=-1 ; z=0  ; break ;
+				case"Sud-Est"    : x=0  ; y=-1 ; z=1  ; break ;
+				case"Sud-Ouest"  : x=-1 ; y=0  ; z=+1 ; break ;
+				case"Ouest"      : x=-1 ; y=+1 ; z=0  ; break ;
+				case"Nord-Ouest" : x=0  ; y=+1 ; z=-1 ; break ;
+			}
+			cristal.setPos(x,y,z);
+			for(Pion pion : this.pions)
+			{
+				if(pion.collision(cristal)) bonPlacement =false;
+			}
+			this.positionCristaux= "";
 		}
-		System.out.println(cristal);
-		cristal.setPos(x,y,z);
+		while(!bonPlacement);
+
 		this.pions.add(cristal);
-		this.positionCristaux= "";
 	}
 }
