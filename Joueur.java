@@ -115,7 +115,12 @@ public class Joueur
 			if(cristal != null )score += cristal.getValeur()-1;
 		}
 		return score ;
-}
+	}
+
+	public Metier getMetier()
+	{
+		return this.metier;
+	}
 
 	public boolean equals(Joueur joueur)
 	{

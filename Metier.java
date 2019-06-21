@@ -16,7 +16,7 @@ public class Metier
 	private ArrayList<Cristal> cristals;
 	private int                indJoueurActif;
 	private int                nbTours;
-	private ModifAlgo          modifAlgo;
+	private ModifAlgo          modifAlgo, modifAlgo2;
 	private String             scenario;
 	private String             positionCristaux;
 
@@ -25,8 +25,8 @@ public class Metier
 		//init
 		this.ctrl=ctrl;
 		this.positionCristaux="";
-		this.joueurs  = new ArrayList<Joueur>();
-		this.pions    = new ArrayList<Pion>();
+		this.joueurs = new ArrayList<Joueur>();
+		this.pions   = new ArrayList<Pion>();
 		this.cristals = new ArrayList<Cristal>();
 		this.nbTours = 0;
 		this.end = false;
@@ -35,7 +35,6 @@ public class Metier
 		if(! Controleur.DEBUG)
 		{
 			Regle.initialisation(this.joueurs,tabNoms.length,this.pions,this.cristals,this,"");
-			System.out.println(tabNoms.length);
 			for(int i = 0 ; i<tabNoms.length ; i++)
 				this.joueurs.get(i).setNom(tabNoms[i]);
 			//teste
@@ -64,33 +63,62 @@ public class Metier
 		}
 		for(Joueur joueur : this.joueurs)
 		{
-			System.out.println(joueur.getNom());
 			this.modifAlgo = new ModifAlgo();
+			this.modifAlgo2 = new ModifAlgo();
 			this.indJoueurActif = this.joueurs.indexOf(joueur);
 			this.ctrl.afficherJeu();
-			do
-			{
+			if(this.nbTours!=1)
 				do
 				{
-					System.out.print("");
-				}
-				while(!this.modifAlgo.getReady());
+					do
+					{
+						System.out.print("");
+					}
+					while(!this.modifAlgo.getReady());
 
-				System.out.println(this.modifAlgo.getJoueur());
-				System.out.println(this.modifAlgo.getRobot());
-				System.out.println(this.modifAlgo.getType());
-				switch (this.modifAlgo.getType())
-				{
-					case 1: erreur=this.placerOrdre(this.modifAlgo); break;
-					case 2: erreur=this.permuterOrdre(this.modifAlgo); break;
-					case 3: erreur=this.retirerOrdre(this.modifAlgo, -1); break;
-					case 4: erreur=this.redemarrerRobot(this.modifAlgo); break;
-					default :
-						erreur = false;
-						break;
+					switch (this.modifAlgo.getType())
+					{
+						case 1: erreur=this.placerOrdre(this.modifAlgo); break;
+						case 2: erreur=this.permuterOrdre(this.modifAlgo); break;
+						case 3: erreur=this.retirerOrdre(this.modifAlgo, -1); break;
+						case 4: erreur=this.redemarrerRobot(this.modifAlgo); break;
+						default :
+							erreur = false;
+							break;
+					}
 				}
-			}
-			while(erreur);
+				while(erreur);
+			else
+				do
+				{
+					do
+					{
+						System.out.print("");
+					}
+					while(!this.modifAlgo.getReady() || !this.modifAlgo2.getReady());
+
+					switch (this.modifAlgo.getType())
+					{
+						case 1: erreur=this.placerOrdre(this.modifAlgo); break;
+						case 2: erreur=this.permuterOrdre(this.modifAlgo); break;
+						case 3: erreur=this.retirerOrdre(this.modifAlgo, -1); break;
+						case 4: erreur=this.redemarrerRobot(this.modifAlgo); break;
+						default :
+							erreur = false;
+							break;
+					}
+					switch (this.modifAlgo2.getType())
+					{
+						case 1: erreur=this.placerOrdre(this.modifAlgo2)      || erreur; break;
+						case 2: erreur=this.permuterOrdre(this.modifAlgo2)    || erreur; break;
+						case 3: erreur=this.retirerOrdre(this.modifAlgo2, -1) || erreur; break;
+						case 4: erreur=this.redemarrerRobot(this.modifAlgo2)  || erreur; break;
+						default :
+							erreur = false || erreur;
+							break;
+					}
+				}
+				while(erreur);
 
 			//Activation des algorithme
 
@@ -122,7 +150,6 @@ public class Metier
 				algo = chaine[1].split("|");
 				//nom et robot du joueur
 				Joueur joueur =  this.getJoueurs(chaine[0].substring(7));
-				System.out.println(joueur);
 				this.ordreDebug(joueur,chaine[1].split("\\|"),0);
 				this.ordreDebug(joueur,chaine[2].split("\\|"),1);
 				this.ctrl.afficherJeu();
@@ -172,7 +199,6 @@ public class Metier
 
 		slot1 = modifAlgo.getSlot();
 		slot2 = modifAlgo.getSlot2();
-		System.out.println(slot1 + " " + slot2);
 	
 		if(slot1<0 || slot1 >5 ||
 		   slot2<0 || slot2 >5 ||
@@ -182,7 +208,6 @@ public class Metier
 		Robot  robot  = modifAlgo.getRobot();
 
 		Ordre tmp = robot.getOrdre(slot1);
-		System.out.println(tmp);
 		robot.setOrdre(slot1, robot.getOrdre(slot2));
 		robot.setOrdre(slot2, tmp);
 		return false;
@@ -229,7 +254,6 @@ public class Metier
 			}
 			joueur.getRobot(indiceRobot).setOrdre(i % 3,ordre);
 			this.ctrl.afficherJeu();
-			System.out.println(joueur.getRobot(indiceRobot));
 		}
 		this.ctrl.afficherJeu();
 		this.executionAlgo(joueur, indiceRobot);
@@ -296,33 +320,16 @@ public class Metier
 		return this.modifAlgo;
 	}
 
-	public ModifAlgo getActualModif(ModifAlgo modifAlgo)
+	public ModifAlgo getModifAlgo2()
 	{
-		Joueur joueur = null;
-		Robot  robot  = null;
-		for(Joueur actJoueur : this.joueurs)
-		{
-			if(modifAlgo.getJoueur().equals(actJoueur))
-			{
-				joueur = actJoueur;
-				if (joueur.getRobot(0).equals(modifAlgo.getRobot()))
-					robot = joueur.getRobot(0);
-				else
-					robot = joueur.getRobot(1);
-			}
-		}
-		ModifAlgo actModifAlgo = new ModifAlgo(joueur, robot, modifAlgo.getSlot(), modifAlgo.getType());
-
-		actModifAlgo.setNewOrdre(modifAlgo.getNewOrdre());
-		actModifAlgo.setSlot2(modifAlgo.getSlot2());
-
-		return actModifAlgo;
+		return this.modifAlgo2;
 	}
-	//ajout raphael
+
 	public boolean getStockVide() { return this.cristals.isEmpty(); }
 
 	public void spawnCristal()
 	{
+		boolean actif = false;
 		if(!this.cristals.isEmpty())
 		{
 			for(Pion pion : this.pions)
@@ -330,15 +337,17 @@ public class Metier
 				if(pion.collision(this.cristals.get(0)))
 				{
 					new DemandeCristaux(this.ctrl);
-					while(!this.positionCristaux.equals(""))
+					while(this.positionCristaux.equals(""))
 					{
 						System.out.print("");
 					}
-					this.popCristal();
-
+					actif = true;
 				}
 			}
-			this.pions.add(this.cristals.remove(0));
+			if (actif)
+				this.popCristal();
+			else
+				this.pions.add(this.cristals.remove(0));
 		}
 
 	}
@@ -351,6 +360,7 @@ public class Metier
 		Cristal cristal = this.cristals.remove(0);
 		int x,y,z ;
 		x=y=z=0;
+		System.out.println(this.positionCristaux);
 		switch(this.positionCristaux)
 		{
 			case"Nord-Est"   : x=1  ; y=0  ; z=-1 ; break ;
@@ -360,9 +370,9 @@ public class Metier
 			case"Ouest"      : x=-1 ; y=+1 ; z=0  ; break ;
 			case"Nord-Ouest" : x=0  ; y=+1 ; z=-1 ; break ;
 		}
+		System.out.println(cristal);
 		cristal.setPos(x,y,z);
 		this.pions.add(cristal);
 		this.positionCristaux= "";
 	}
-
 }

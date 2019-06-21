@@ -208,6 +208,7 @@ public class Robot extends Pion
 			{
 				((Base)pionTmp).stocker( this.cristal );
 				this.cristal = null;
+				this.joueur.getMetier().spawnCristal();
 			}
 			else if (pionTmp instanceof Robot && ((Robot)pionTmp).cristal == null)
 			{
