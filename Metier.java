@@ -19,6 +19,7 @@ public class Metier
 	private ModifAlgo          modifAlgo, modifAlgo2;
 	private String             scenario;
 	private String             positionCristaux;
+	private Victoire           victoire;
 
 	public Metier(Controleur ctrl, String[] tabNoms)
 	{
@@ -30,6 +31,7 @@ public class Metier
 		this.cristals = new ArrayList<Cristal>();
 		this.nbTours = 0;
 		this.end = false;
+		this.victoire = new Victoire(this.pions, tabNoms.length, this);
 
 		//a la charge de creer et donner les ordres
 		if(! Controleur.DEBUG)
@@ -37,12 +39,6 @@ public class Metier
 			Regle.initialisation(this.joueurs,tabNoms.length,this.pions,this.cristals,this,"");
 			for(int i = 0 ; i<tabNoms.length ; i++)
 				this.joueurs.get(i).setNom(tabNoms[i]);
-			//teste
-			for(Joueur joueur : this.joueurs)
-			{
-				joueur.getRobot(0).setOrdre(0,new Avancer(1,"./TwinTinBots/img/imgOrdre0.png"));
-				joueur.getRobot(1).setOrdre(0,new Avancer(1,"./TwinTinBots/img/imgOrdre0.png"));
-			}
 		}
 		else
 		{
@@ -55,7 +51,7 @@ public class Metier
 	public void jouer()
 	{
 		Ordre tmp;
-		boolean erreur;
+		boolean erreur = false;
 		nbTours++;
 		if(Controleur.DEBUG)
 		{
@@ -67,71 +63,33 @@ public class Metier
 			this.modifAlgo2 = new ModifAlgo();
 			this.indJoueurActif = this.joueurs.indexOf(joueur);
 			this.ctrl.afficherJeu();
-			if(this.nbTours!=1)
-				do
-				{
-					do
-					{
-						System.out.print("");
-					}
-					while(!this.modifAlgo.getReady());
-
-					switch (this.modifAlgo.getType())
-					{
-						case 1: erreur=this.placerOrdre(this.modifAlgo); break;
-						case 2: erreur=this.permuterOrdre(this.modifAlgo); break;
-						case 3: erreur=this.retirerOrdre(this.modifAlgo, -1); break;
-						case 4: erreur=this.redemarrerRobot(this.modifAlgo); break;
-						default :
-							erreur = false;
-							break;
-					}
-				}
-				while(erreur);
-			else
-				do
-				{
-					do
-					{
-						System.out.print("");
-					}
-					while(!this.modifAlgo.getReady() || !this.modifAlgo2.getReady());
-
-					switch (this.modifAlgo.getType())
-					{
-						case 1: erreur=this.placerOrdre(this.modifAlgo); break;
-						case 2: erreur=this.permuterOrdre(this.modifAlgo); break;
-						case 3: erreur=this.retirerOrdre(this.modifAlgo, -1); break;
-						case 4: erreur=this.redemarrerRobot(this.modifAlgo); break;
-						default :
-							erreur = false;
-							break;
-					}
-					switch (this.modifAlgo2.getType())
-					{
-						case 1: erreur=this.placerOrdre(this.modifAlgo2)      || erreur; break;
-						case 2: erreur=this.permuterOrdre(this.modifAlgo2)    || erreur; break;
-						case 3: erreur=this.retirerOrdre(this.modifAlgo2, -1) || erreur; break;
-						case 4: erreur=this.redemarrerRobot(this.modifAlgo2)  || erreur; break;
-						default :
-							erreur = false || erreur;
-							break;
-					}
-				}
-				while(erreur);
+			this.typeAction(this.modifAlgo);
+			if(this.nbTours==1)
+				this.typeAction(this.modifAlgo2);
 
 			//Activation des algorithme
 
-			this.ctrl.afficherJeu();
+			
 			this.executionAlgo(joueur, 0);
-			this.ctrl.afficherJeu();
 			this.executionAlgo(joueur, 1);
-			this.ctrl.afficherJeu();
 			for(Pion pion : pions)
 				System.out.println(pion);
 
 			//Vérification de fin de partie
 			if(this.end) break;
+		}
+	}
+
+	private void typeAction(ModifAlgo modifAlgo)
+	{
+		do { System.out.print(""); } while(modifAlgo.getReady());
+
+		switch (modifAlgo.getType())
+		{
+			case 1: this.placerOrdre(modifAlgo)     ; break;
+			case 2: this.permuterOrdre(modifAlgo)   ; break;
+			case 3: this.retirerOrdre(modifAlgo, -1); break;
+			case 4: this.redemarrerRobot(modifAlgo) ; break;
 		}
 	}
 
@@ -162,23 +120,24 @@ public class Metier
 
 	private void executionAlgo(Joueur joueur, int idRobot)
 	{
+		this.ctrl.afficherJeu();
 		for(Ordre ordre : joueur.getRobot(idRobot).getAlgo())
-				if(ordre!=null)
-				{
-					try{Thread.sleep(500);}
-					catch(Exception e){}
-					ordre.action(joueur.getRobot(idRobot));
-					this.ctrl.afficherJeu();
-				}
+			if(ordre!=null)
+			{
+				try{Thread.sleep(500);}
+				catch(Exception e){}
+				ordre.action(joueur.getRobot(idRobot));
+				this.ctrl.afficherJeu();
+			}
+		this.ctrl.afficherJeu();
 	}
 
-	private boolean placerOrdre(ModifAlgo modifAlgo)
+	private void placerOrdre(ModifAlgo modifAlgo)
 	{
 		int nouvelOrdre = modifAlgo.getNewOrdre();
 		Joueur joueur = modifAlgo.getJoueur();
 		Robot robot = modifAlgo.getRobot();
 		int   slot = modifAlgo.getSlot();
-		if( slot<0 || slot>5 ) return true;
 		Ordre tmp  = robot.getOrdre(slot);
 		if(tmp!=null)
 		{
@@ -190,19 +149,14 @@ public class Metier
 		{
 			robot.setOrdre(slot,joueur.retirer(nouvelOrdre));
 		}
-		return false;
 	}
 
-	private boolean permuterOrdre(ModifAlgo modifAlgo)
+	private void permuterOrdre(ModifAlgo modifAlgo)
 	{
 		int slot1, slot2;
 
 		slot1 = modifAlgo.getSlot();
 		slot2 = modifAlgo.getSlot2();
-	
-		if(slot1<0 || slot1 >5 ||
-		   slot2<0 || slot2 >5 ||
-		   (slot1<3 != slot2<3)) return true;
 
 		Joueur joueur = modifAlgo.getJoueur();
 		Robot  robot  = modifAlgo.getRobot();
@@ -210,29 +164,25 @@ public class Metier
 		Ordre tmp = robot.getOrdre(slot1);
 		robot.setOrdre(slot1, robot.getOrdre(slot2));
 		robot.setOrdre(slot2, tmp);
-		return false;
 	}
 
-	private boolean retirerOrdre(ModifAlgo modifAlgo, int slot)
+	private void retirerOrdre(ModifAlgo modifAlgo, int slot)
 	{
 		if(slot==-1)
 		{
 			slot = modifAlgo.getSlot();
-			if (slot < 0 || slot > 5 ) return true;
 		}
 
 		modifAlgo.getJoueur().ajouter(modifAlgo.getRobot().getOrdre(slot));
 		modifAlgo.getRobot().setOrdre(slot, null);
-		return false;
 	}
 
-	private boolean redemarrerRobot(ModifAlgo modifAlgo)
+	private void redemarrerRobot(ModifAlgo modifAlgo)
 	{
 		for(int i=0 ;  i<modifAlgo.getRobot().getAlgo().length ; i++)
 		{
 			retirerOrdre(modifAlgo, i);
 		}
-		return false;
 	}
 
 	private void ordreDebug(Joueur joueur,String[] algo,int indiceRobot)
@@ -296,7 +246,7 @@ public class Metier
 
 	public Joueur getJoueurActif()
 	{
-		return new Joueur(this.joueurs.get(this.indJoueurActif));
+		return /*new Joueur(*/this.joueurs.get(this.indJoueurActif);//);
 	}
 
 	public int getScoreJoueurActif()
@@ -355,6 +305,12 @@ public class Metier
 	{
 		this.positionCristaux=position ;
 	}
+
+	public void setEnd(boolean b)
+	{
+		this.end = b;
+	}
+
 	private void popCristal()
 	{
 		Cristal cristal = this.cristals.remove(0);
