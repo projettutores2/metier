@@ -53,7 +53,8 @@ public class Joueur
 	{
 		if(indice < this.stockOrdres.size())
 			 return this.stockOrdres.remove(indice);
-		else return null ;
+		else 
+			return null ;
 	}
 	
 	public void creeRobot(Robot robot1, Robot robot2)

@@ -13,9 +13,9 @@ public class Regle
 {
 	//regle de base du jeu 
 	private final static String[] NOM_ORDRE= {"avancer","avancerDouble","rotationDroite","rotationGauche","charger","decharger"};
-	private final static int CRISTAL_VERT  = 3;
-	private final static int CRISTAL_BLEU  = 2;
-	private final static int CRISTAL_ROUGE = 4;
+	public final static int CRISTAL_VERT  = 3;
+	public final static int CRISTAL_BLEU  = 2;
+	public final static int CRISTAL_ROUGE = 4;
 
 	public static void initialisation(ArrayList<Joueur> joueurs,int nbJoueur,ArrayList<Pion> pions,ArrayList<Cristal> cristals,Metier metier,String scenario)
 	{

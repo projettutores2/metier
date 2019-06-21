@@ -16,6 +16,7 @@ public class Metier
 	private ArrayList<Cristal> cristals;
 	private int                indJoueurActif;
 	private int                nbTours;
+	private int                tourFin;
 	private ModifAlgo          modifAlgo, modifAlgo2;
 	private String             scenario;
 	private String             positionCristaux;
@@ -30,8 +31,8 @@ public class Metier
 		this.pions   = new ArrayList<Pion>();
 		this.cristals = new ArrayList<Cristal>();
 		this.nbTours = 0;
+		this.tourFin = 0;
 		this.end = false;
-		this.victoire = new Victoire(this.pions, tabNoms.length, this);
 
 		//a la charge de creer et donner les ordres
 		if(! Controleur.DEBUG)
@@ -45,6 +46,7 @@ public class Metier
 			this.scenario = tabNoms[0];
 			Regle.initialisation(this.joueurs,6,this.pions,this.cristals,this,scenario);
 		}
+		this.victoire = new Victoire(this.pions, this.joueurs.size(), this);
 	}
 
 	
@@ -52,7 +54,7 @@ public class Metier
 	{
 		Ordre tmp;
 		boolean erreur = false;
-		nbTours++;
+		this.nbTours++;
 		if(Controleur.DEBUG)
 		{
 			this.debugActif(scenario);
@@ -76,6 +78,11 @@ public class Metier
 				System.out.println(pion);
 
 			//Vérification de fin de partie
+			if(this.cristals.isEmpty() && this.tourFin==0)
+				this.tourFin = this.nbTours + 3;
+
+			this.victoire.setEnd(this.nbTours==this.tourFin);
+			this.victoire.estFinie();
 			if(this.end) break;
 		}
 	}
@@ -104,6 +111,7 @@ public class Metier
 
 			while ( sc.hasNextLine() )
 			{
+				this.nbTours++;
 				chaine = sc.nextLine().split(":");
 				algo = chaine[1].split("|");
 				//nom et robot du joueur
@@ -111,6 +119,14 @@ public class Metier
 				this.ordreDebug(joueur,chaine[1].split("\\|"),0);
 				this.ordreDebug(joueur,chaine[2].split("\\|"),1);
 				this.ctrl.afficherJeu();
+
+				//Vérification de fin de partie
+				//if(this.cristals.isEmpty() && this.tourFin==0)
+				//	this.tourFin = this.nbTours + 3;
+
+				//this.victoire.setEnd(this.nbTours==this.tourFin);
+				this.victoire.estFinie();
+				if(this.end) break;
 			}
 		  sc.close();
 		}
@@ -259,6 +275,20 @@ public class Metier
 	}
 
 	public boolean getEnd() {return this.end ;}
+
+	public String getGagnant()
+	{
+		String gagnant = "";
+		if(this.victoire.getEgalite())
+		{
+			gagnant += "Egalité entre : ";
+			for(Joueur joueur : this.victoire.getGagnants())
+				gagnant+= joueur.getNom() + " ";
+		}
+		else
+			gagnant+=this.victoire.getJoueurGagnant().getNom();
+		return gagnant;
+	}
 	
 	public ArrayList<Pion> getListePions()
 	{
